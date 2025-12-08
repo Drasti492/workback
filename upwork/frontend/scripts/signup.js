@@ -1,3 +1,4 @@
+// scripts/signup.js
 document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signupForm");
   const signupMessage = document.getElementById("signupMessage");
@@ -7,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function showMessage(text, type = "error") {
     signupMessage.textContent = text;
     signupMessage.className = `message ${type}`;
+    signupMessage.style.display = "block";
   }
 
   togglePassword.forEach((toggle) => {
@@ -28,21 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
   signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(signupForm);
-    
-    // Log all form data entries
     const formDataEntries = {};
     for (const [key, value] of formData.entries()) {
-      formDataEntries[key] = value;
+      formDataEntries[key] = value.trim();
     }
-    console.log("Raw FormData:", formDataEntries); // Debugging
 
-    const name = formData.get("name").trim();
-    const phone = formData.get("phone").trim();
-    const email = formData.get("email").trim();
-    const password = formData.get("password").trim();
-    const confirmPassword = formData.get("confirm-password").trim();
-
-    console.log("Processed form data:", { name, phone, email, password, confirmPassword }); // Debugging
+    const { name, phone, email, password, "confirm-password": confirmPassword } = formDataEntries;
 
     if (!name || !phone || !email || !password || !confirmPassword) {
       showMessage("Please fill in all fields, including phone number.");
@@ -54,29 +47,30 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    showMessage("Signing up...", "success");
+
     try {
       const res = await fetch("https://remj82.onrender.com/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, phone, email, password }),
-        credentials: "include",
       });
 
       const data = await res.json();
-      console.log("Register API response:", data); // Debugging
+      console.log("Register API response:", data);
 
       if (res.ok) {
         showMessage(data.message, "success");
         localStorage.setItem("verifyEmail", email);
         signupForm.reset();
         setTimeout(() => {
-          window.location.href = "verify.html";
+          window.location.href = "../pages/verify.html";
         }, 1500);
       } else {
         showMessage(data.message || "Registration failed. Please try again.");
       }
     } catch (err) {
-      console.error("Signup error:", err.message);
+      console.error("Signup error:", err);
       showMessage("Network error. Please try again.");
     }
   });

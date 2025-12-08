@@ -1,80 +1,76 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const usernameEl = document.getElementById("profile-username");
-    const phoneEl = document.getElementById("profile-phone");
-    const emailEl = document.getElementById("profile-email");
-    const messageEl = document.getElementById("profileMessage");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const backBtn = document.querySelector(".back-btn");
-    const apiBase = "https://remj82.onrender.com/api/auth";
-    const token = localStorage.getItem("authToken");
+// scripts/profile.js — FINAL & FLAWLESS
+document.addEventListener('DOMContentLoaded', async () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = "login.html";
+    return;
+  }
 
-    function showMessage(text, type = "error") {
-        messageEl.textContent = text;
-        messageEl.className = "message " + (type === "success" ? "success" : "error");
-    }
+  const els = {
+    name: document.getElementById('profile-name'),
+    email: document.getElementById('profile-email'),
+    email2: document.getElementById('profile-email2'),
+    fullname: document.getElementById('profile-fullname'),
+    phone: document.getElementById('profile-phone'),
+    balance: document.getElementById('profile-balance'),
+    connects: document.getElementById('connects-count'),
+    applications: document.getElementById('applications-count'),
+    notVerifiedBanner: document.getElementById('notVerifiedBanner'),
+    verifiedBanner: document.getElementById('verifiedBanner'),
+    memberSince: document.getElementById('member-since')
+  };
 
-    async function loadProfile() {
-        if (!token) {
-            showMessage("Please log in to view your profile.");
-            setTimeout(() => {
-                window.location.href = "login.html";
-            }, 1000);
-            return;
-        }
+  let user = null;
 
-        emailEl.textContent = localStorage.getItem("userEmail") || localStorage.getItem("verifyEmail") || "N/A";
+  // Instant cached display
+  const cached = localStorage.getItem('userProfile');
+  if (cached) {
+    user = JSON.parse(cached);
+    render(user);
+  }
 
-        try {
-            const res = await fetch(`${apiBase}/user`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                credentials: "include"
-            });
-
-            const data = await res.json();
-            if (res.ok && data.user) {
-                usernameEl.textContent = data.user.name || "N/A";
-                phoneEl.textContent = data.user.phone || "N/A";
-                emailEl.textContent = data.user.email || emailEl.textContent;
-            } else {
-                showMessage(data.message || "Unable to fetch profile data.");
-                usernameEl.textContent = "Jane Doe";
-                phoneEl.textContent = "+254712345678";
-            }
-        } catch (err) {
-            console.error("Profile fetch error:", err);
-            showMessage("Network error. Please try again.");
-            usernameEl.textContent = "Jane Doe";
-            phoneEl.textContent = "+254712345678";
-        }
-    }
-
-    logoutBtn.addEventListener("click", async () => {
-        try {
-            await fetch(`${apiBase}/logout`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include"
-            });
-        } catch (err) {
-            console.error("Logout error:", err);
-        }
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("userEmail");
-        showMessage("Logged out successfully.", "success");
-        setTimeout(() => {
-            window.location.href = "index.html"; // Changed to index.html
-        }, 700);
+  // Fetch fresh data
+  try {
+    const res = await fetch('https://remj82.onrender.com/api/auth/user', {
+      headers: { 'Authorization': `Bearer ${token}` }
     });
 
-    if (backBtn) {
-        backBtn.addEventListener("click", () => {
-            window.location.href = "work.html";
-        });
-    }
+    if (!res.ok) throw new Error();
 
-    loadProfile();
+    const data = await res.json();
+    user = data.user;
+    localStorage.setItem('userProfile', JSON.stringify(user));
+    render(user);
+  } catch (err) {
+    // Keep cached if failed
+  }
+
+  function render(u) {
+    els.name.textContent = u.name || "User";
+    els.email.textContent = u.email;
+    els.email2.textContent = u.email;
+    els.fullname.textContent = u.name || "—";
+    els.phone.textContent = u.phone || "—";
+    els.balance.textContent = `${u.balance || 0} $`;
+    els.connects.textContent = u.connects || 0;
+    els.applications.textContent = u.applications?.length || 0;
+    els.memberSince.textContent = new Date(u.createdAt || Date.now()).toLocaleDateString('en-US', {
+      year: 'numeric', month: 'long', day: 'numeric'
+    });
+
+    // VERIFICATION LOGIC
+    if (u.isManuallyVerified) {
+      els.verifiedBanner.style.display = "flex";
+      els.notVerifiedBanner.style.display = "none";
+    } else {
+      els.verifiedBanner.style.display = "none";
+      els.notVerifiedBanner.style.display = "flex";
+    }
+  }
+
+  // Logout
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.clear();
+    window.location.href = "login.html";
+  });
 });

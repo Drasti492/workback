@@ -1,1394 +1,1273 @@
-// Sample job data (30 Kenyan-specific tasks, 5 per page, 6 pages total)
-// This array contains job listings tailored for Kenyan professionals, focusing on remote and freelance opportunities
+// jobsData with 160 simple tech jobs, 90% remote, USA locations, realistic USD salaries
+// scripts/upwork.js
+document.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+  if (userProfile) {
+    console.log(`Welcome back, ${userProfile.name}!`);
+  }
+  
+});
+
 const jobsData = [
+    // Manually crafted first 20 jobs for variety
     {
         id: 1,
         title: "Design Simple Logo",
-        company: "Nairobi Prints",
-        location: "Nairobi, Kenya",
+        company: "Big Apple Designs",
+        location: "New York, NY",
         type: "Freelance",
-        salary: "KES 300 - 2,000",
+        salary: "$5 - $15",
         experience: "Entry Level",
         remote: "Remote",
         tags: ["Canva", "Graphic Design", "Branding"],
         logo: "/api/placeholder/60/60",
         date: "1 day ago",
-        description: "Design simple logos for small businesses like matatu companies or local shops in Nairobi using Canva.",
-        responsibilities: [
-            "Create a logo based on client brief (e.g., for a Nairobi salon)",
-            "Use Canva templates to design in 1–2 hours",
-            "Deliver PNG/JPG files via email or WhatsApp"
-        ],
-        requirements: [
-            "Basic computer skills (learned at university)",
-            "Access to free Canva account",
-            "Ability to follow simple design briefs",
-            "No prior design experience needed"
-        ],
-        benefits: [
-            "Flexible hours (work evenings)",
-            "M-Pesa payments",
-            "Build portfolio for global clients",
-            "Work from home or cyber café"
-        ]
+        description: "Create simple logos for New York-based small businesses like cafes or retail stores using Canva.",
+        responsibilities: ["Design logo based on client brief", "Use Canva templates", "Deliver PNG/JPG files"],
+        requirements: ["Basic computer skills", "Free Canva account", "No prior design experience"],
+        benefits: ["Flexible hours", "PayPal payments", "Work from home"]
     },
     {
         id: 2,
-        title: "Create Social Media Graphics",
-        company: "Mombasa Digital",
-        location: "Mombasa, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 1,000",
+        title: "Answer Math Questions",
+        company: "Lone Star Tutoring",
+        location: "Austin, TX",
+        type: "Part-time",
+        salary: "$3 - $8",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["Canva", "Social Media", "Marketing"],
+        tags: ["Math", "Tutoring", "Education"],
         logo: "/api/placeholder/60/60",
         date: "2 days ago",
-        description: "Design Instagram/Facebook posts for coastal businesses like hotels or tour agencies using Canva.",
-        responsibilities: [
-            "Design 1–2 social media posts with text/images",
-            "Follow client’s branding (e.g., Mombasa colors)",
-            "Deliver files via WhatsApp or email"
-        ],
-        requirements: [
-            "Smartphone/laptop with internet",
-            "Free Canva account",
-            "Basic creativity from uni art classes"
-        ],
-        benefits: [
-            "Quick payments via M-Pesa",
-            "Work from anywhere in Kenya",
-            "Learn social media marketing"
-        ]
+        description: "Solve math problems (algebra, calculus) for students via an online platform in Texas.",
+        responsibilities: ["Answer 5–10 math questions daily", "Explain solutions clearly", "Submit via platform"],
+        requirements: ["Strong math skills", "High school diploma", "Reliable internet"],
+        benefits: ["Flexible schedule", "Online payments", "Build teaching skills"]
     },
     {
         id: 3,
-        title: "Design Event Flyers",
-        company: "Kisumu Events",
-        location: "Kisumu, Kenya",
+        title: "Write Product Reviews",
+        company: "Bay Area E-Commerce",
+        location: "San Francisco, CA",
         type: "Freelance",
-        salary: "KES 400 - 1,500",
+        salary: "$3 - $7",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["Canva", "Events", "Graphic Design"],
+        tags: ["Writing", "Reviews", "E-Commerce"],
         logo: "/api/placeholder/60/60",
-        date: "3 days ago",
-        description: "Create flyers for local events like church gatherings or harambees in Kisumu using Canva templates.",
-        responsibilities: [
-            "Design 1 flyer with event details",
-            "Use vibrant Kenyan designs",
-            "Deliver in 1 hour via email"
-        ],
-        requirements: [
-            "Basic computer skills",
-            "Free Canva account",
-            "Ability to read event briefs"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Support local community events",
-            "Flexible hours"
-        ]
+        date: "1 day ago",
+        description: "Write short reviews for products sold by San Francisco online stores.",
+        responsibilities: ["Write 100–200 word reviews", "Highlight product features", "Submit via email"],
+        requirements: ["Good writing skills", "Attention to detail", "Basic computer access"],
+        benefits: ["Work from home", "PayPal payments", "Flexible tasks"]
     },
     {
         id: 4,
-        title: "Basic Photo Editing",
-        company: "Eldoret Media",
-        location: "Eldoret, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 800",
-        experience: "Entry Level",
+        title: "Edit Short Videos",
+        company: "Windy City Media",
+        location: "Chicago, IL",
+        type: "Part-time",
+        salary: "$8 - $20",
+        experience: "Mid Level",
         remote: "Remote",
-        tags: ["GIMP", "Photo Editing", "E-commerce"],
+        tags: ["Video Editing", "Social Media", "Content Creation"],
         logo: "/api/placeholder/60/60",
-        date: "1 day ago",
-        description: "Edit photos for local e-commerce shops like those on Kilimall, cropping or adding filters using GIMP.",
-        responsibilities: [
-            "Crop/resize 1–2 photos",
-            "Apply basic filters (e.g., brighten)",
-            "Deliver via WhatsApp"
-        ],
-        requirements: [
-            "Free GIMP software",
-            "Basic computer skills",
-            "Smartphone/laptop with internet"
-        ],
-        benefits: [
-            "Quick tasks (20 min)",
-            "M-Pesa payments",
-            "Learn photo editing skills"
-        ]
+        date: "3 days ago",
+        description: "Edit 30–60 second video clips for Chicago businesses’ social media campaigns.",
+        responsibilities: ["Trim and enhance videos", "Add captions or effects", "Deliver via cloud"],
+        requirements: ["Experience with editing tools (e.g., Adobe Premiere, Canva)", "Creative skills"],
+        benefits: ["Flexible hours", "Online payments", "Portfolio growth"]
     },
     {
         id: 5,
-        title: "Create Poster for Market",
-        company: "Nakuru Traders",
-        location: "Nakuru, Kenya",
+        title: "Reply to YouTube Comments",
+        company: "Sunshine Digital",
+        location: "Miami, FL",
         type: "Freelance",
-        salary: "KES 400 - 1,500",
+        salary: "$2 - $5",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["Canva", "Marketing", "Local Business"],
+        tags: ["Social Media", "YouTube", "Engagement"],
         logo: "/api/placeholder/60/60",
         date: "2 days ago",
-        description: "Design posters for Nakuru market stalls or small businesses to advertise products like farm produce.",
-        responsibilities: [
-            "Create 1 poster with product details",
-            "Use Canva templates with Kenyan designs",
-            "Deliver via email"
-        ],
-        requirements: [
-            "Free Canva account",
-            "Basic creativity",
-            "Internet access"
-        ],
-        benefits: [
-            "Support local traders",
-            "M-Pesa payments",
-            "Work from home"
-        ]
+        description: "Respond to comments on YouTube videos for Miami-based content creators.",
+        responsibilities: ["Reply to 20–50 comments daily", "Maintain positive tone", "Follow brand guidelines"],
+        requirements: ["Good communication skills", "YouTube account", "Reliable internet"],
+        benefits: ["Work from home", "PayPal payments", "Flexible schedule"]
     },
     {
         id: 6,
-        title: "Solve Maths Calculations",
-        company: "Nairobi Tutors",
-        location: "Nairobi, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 1,500",
-        experience: "Entry Level",
+        title: "Manage Social Media Posts",
+        company: "Emerald City Marketing",
+        location: "Seattle, WA",
+        type: "Part-time",
+        salary: "$8 - $18",
+        experience: "Mid Level",
         remote: "Remote",
-        tags: ["Math", "Tutoring", "KCSE"],
+        tags: ["Social Media", "Marketing", "Content Creation"],
         logo: "/api/placeholder/60/60",
-        date: "1 day ago",
-        description: "Solve KCSE-level math problems (algebra, geometry) for online tutoring platforms.",
-        responsibilities: [
-            "Solve 5–10 math questions",
-            "Show workings clearly",
-            "Deliver via Google Docs"
-        ],
-        requirements: [
-            "KCSE math knowledge",
-            "Basic calculator",
-            "Internet access"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Flexible hours",
-            "Help students"
-        ]
+        date: "4 days ago",
+        description: "Schedule and post content on Instagram and Twitter for Seattle startups.",
+        responsibilities: ["Create 3–5 posts weekly", "Use scheduling tools", "Engage with followers"],
+        requirements: ["Social media experience", "Canva or similar tool", "Good communication"],
+        benefits: ["Remote work", "Online payments", "Learn marketing"]
     },
     {
         id: 7,
-        title: "Geography Research Summary",
-        company: "Kenyatta Uni Press",
-        location: "Nairobi, Kenya",
+        title: "Photo Editing for E-Commerce",
+        company: "Mile High Creations",
+        location: "Denver, CO",
         type: "Freelance",
-        salary: "KES 500 - 2,000",
+        salary: "$5 - $12",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["Geography", "Research", "Writing"],
+        tags: ["Photo Editing", "Photoshop", "E-Commerce"],
         logo: "/api/placeholder/60/60",
-        date: "2 days ago",
-        description: "Write 200–300 word summaries on Kenyan geography topics like Rift Valley or coastal erosion.",
-        responsibilities: [
-            "Research topic using Google",
-            "Write 200-word summary",
-            "Deliver via email"
-        ],
-        requirements: [
-            "Basic research skills",
-            "Google Docs access",
-            "English/Swahili fluency"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Learn Kenyan geography",
-            "Flexible hours"
-        ]
+        date: "1 day ago",
+        description: "Edit product photos for online stores in Denver using Photoshop or Canva.",
+        responsibilities: ["Enhance 10–20 images", "Remove backgrounds", "Deliver via cloud"],
+        requirements: ["Basic photo editing skills", "Access to editing software", "Attention to detail"],
+        benefits: ["Flexible tasks", "PayPal payments", "Work from home"]
     },
     {
         id: 8,
-        title: "Answer Short Geography Questions",
-        company: "Mombasa Edu Hub",
-        location: "Mombasa, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 800",
+        title: "Texting Customer Support on WhatsApp",
+        company: "Boston Tech Solutions",
+        location: "Boston, MA",
+        type: "Part-time",
+        salary: "$3 - $7",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["Geography", "Quizzes", "KCSE"],
+        tags: ["Customer Support", "WhatsApp", "Communication"],
         logo: "/api/placeholder/60/60",
-        date: "3 days ago",
-        description: "Answer 5–10 short geography questions (e.g., ‘Name Kenya’s lakes’).",
-        responsibilities: [
-            "Answer 5–10 questions",
-            "Use simple sentences",
-            "Deliver via WhatsApp"
-        ],
-        requirements: [
-            "KCSE geography knowledge",
-            "Internet access",
-            "Smartphone/laptop"
-        ],
-        benefits: [
-            "Quick tasks",
-            "M-Pesa payments",
-            "Support education"
-        ]
+        date: "2 days ago",
+        description: "Provide customer support via WhatsApp for Boston-based tech companies.",
+        responsibilities: ["Respond to customer queries", "Follow scripts", "Log interactions"],
+        requirements: ["Smartphone with WhatsApp", "Good typing skills", "Reliable internet"],
+        benefits: ["Work from anywhere", "Online payments", "Flexible hours"]
     },
     {
         id: 9,
-        title: "Summarize News Articles",
-        company: "Daily Nation Freelance",
-        location: "Nairobi, Kenya",
+        title: "Answer Short Survey Questions",
+        company: "Music City Research",
+        location: "Nashville, TN",
         type: "Freelance",
-        salary: "KES 400 - 1,500",
+        salary: "$2 - $4",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["Writing", "Research", "News"],
+        tags: ["Surveys", "Research", "Data Collection"],
         logo: "/api/placeholder/60/60",
-        date: "1 day ago",
-        description: "Summarize Kenyan news articles (e.g., from Nation or Standard) in 100–200 words.",
-        responsibilities: [
-            "Read 1 article",
-            "Write 100-word summary",
-            "Deliver via Google Docs"
-        ],
-        requirements: [
-            "English fluency",
-            "Access to news sites",
-            "Basic writing skills"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Stay updated on news",
-            "Flexible hours"
-        ]
+        date: "3 days ago",
+        description: "Complete short survey questions for market research firms in Nashville.",
+        responsibilities: ["Answer 10–20 questions", "Provide honest feedback", "Submit online"],
+        requirements: ["Basic computer skills", "Internet access", "No experience needed"],
+        benefits: ["Quick tasks", "PayPal payments", "Work from home"]
     },
     {
         id: 10,
-        title: "Create Study Notes",
-        company: "Kisumu Tutors",
-        location: "Kisumu, Kenya",
+        title: "Reply to TikTok Comments",
+        company: "Sunshine Influencers",
+        location: "Los Angeles, CA",
         type: "Freelance",
-        salary: "KES 300 - 1,200",
+        salary: "$2 - $5",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["Education", "Notes", "KCSE"],
+        tags: ["Social Media", "TikTok", "Engagement"],
         logo: "/api/placeholder/60/60",
-        date: "2 days ago",
-        description: "Create bullet-point notes for KCSE subjects like history or biology.",
-        responsibilities: [
-            "Summarize 1 chapter",
-            "Write 10–20 bullet points",
-            "Deliver via email"
-        ],
-        requirements: [
-            "KCSE knowledge",
-            "Google Docs access",
-            "Basic research skills"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Help students",
-            "Work from home"
-        ]
+        date: "1 day ago",
+        description: "Engage with TikTok comments for LA-based influencers or brands.",
+        responsibilities: ["Reply to 20–50 comments daily", "Use positive tone", "Follow guidelines"],
+        requirements: ["TikTok account", "Communication skills", "Reliable internet"],
+        benefits: ["Flexible schedule", "PayPal payments", "Work remotely"]
     },
     {
         id: 11,
-        title: "Write Short Blog Posts",
-        company: "Safaricom Bloggers",
-        location: "Nairobi, Kenya",
-        type: "Freelance",
-        salary: "KES 500 - 2,000",
-        experience: "Entry Level",
-        remote: "Remote",
-        tags: ["Writing", "Blogging", "Tourism"],
-        logo: "/api/placeholder/60/60",
-        date: "1 day ago",
-        description: "Write 300-word blog posts on Kenyan topics like tourism or tech for local blogs.",
-        responsibilities: [
-            "Write 1 post on given topic",
-            "Use simple English",
-            "Deliver via Google Docs"
-        ],
-        requirements: [
-            "English fluency",
-            "Internet access",
-            "Basic writing skills"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Build writing portfolio",
-            "Flexible hours"
-        ]
-    },
-    {
-        id: 12,
-        title: "Product Descriptions",
-        company: "Jumia Kenya",
-        location: "Nairobi, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 800",
-        experience: "Entry Level",
-        remote: "Remote",
-        tags: ["Writing", "E-commerce", "Marketing"],
-        logo: "/api/placeholder/60/60",
-        date: "2 days ago",
-        description: "Write 50–100 word descriptions for products on Kenyan e-commerce platforms like Jumia.",
-        responsibilities: [
-            "Write 1 description",
-            "Highlight product features",
-            "Deliver via email"
-        ],
-        requirements: [
-            "English fluency",
-            "Basic research skills",
-            "Internet access"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Quick tasks",
-            "Learn e-commerce"
-        ]
-    },
-    {
-        id: 13,
-        title: "Write Social Media Captions",
-        company: "Mombasa Marketing",
-        location: "Mombasa, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 700",
-        experience: "Entry Level",
-        remote: "Remote",
-        tags: ["Social Media", "Writing", "Marketing"],
-        logo: "/api/placeholder/60/60",
-        date: "3 days ago",
-        description: "Write 10–20 short captions for Kenyan businesses’ social media posts.",
-        responsibilities: [
-            "Write 10 captions",
-            "Use engaging language",
-            "Deliver via WhatsApp"
-        ],
-        requirements: [
-            "Social media familiarity",
-            "English/Swahili fluency",
-            "Smartphone access"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Quick tasks",
-            "Learn marketing"
-        ]
-    },
-    {
-        id: 14,
-        title: "Transcribe Short Audio",
-        company: "Nairobi Podcasts",
-        location: "Nairobi, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 1,200",
-        experience: "Entry Level",
-        remote: "Remote",
-        tags: ["Transcription", "Audio", "Swahili"],
-        logo: "/api/placeholder/60/60",
-        date: "1 day ago",
-        description: "Transcribe 5-min Kenyan podcast clips in English or Swahili.",
-        responsibilities: [
-            "Listen to 5-min audio",
-            "Type transcript",
-            "Deliver via Google Docs"
-        ],
-        requirements: [
-            "Good listening skills",
-            "Free Otter.ai account",
-            "Internet access"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Flexible hours",
-            "Learn transcription"
-        ]
-    },
-    {
-        id: 15,
-        title: "Rewrite Sentences",
-        company: "Kisumu Writers",
-        location: "Kisumu, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 800",
-        experience: "Entry Level",
-        remote: "Remote",
-        tags: ["Writing", "Editing", "English"],
-        logo: "/api/placeholder/60/60",
-        date: "2 days ago",
-        description: "Paraphrase 10–20 sentences for Kenyan educational content.",
-        responsibilities: [
-            "Rewrite 10 sentences",
-            "Keep meaning clear",
-            "Deliver via email"
-        ],
-        requirements: [
-            "English fluency",
-            "Basic writing skills",
-            "Internet access"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Quick tasks",
-            "Improve writing skills"
-        ]
-    },
-    {
-        id: 16,
-        title: "Data Entry",
-        company: "Nairobi Data Solutions",
-        location: "Nairobi, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 800",
+        title: "Data Entry for Startups",
+        company: "Silicon Valley Analytics",
+        location: "San Jose, CA",
+        type: "Part-time",
+        salary: "$3 - $8",
         experience: "Entry Level",
         remote: "Remote",
         tags: ["Data Entry", "Excel", "Admin"],
         logo: "/api/placeholder/60/60",
+        date: "2 days ago",
+        description: "Enter data into spreadsheets for San Jose tech startups.",
+        responsibilities: ["Input 50–100 records daily", "Ensure accuracy", "Submit via cloud"],
+        requirements: ["Basic Excel skills", "Attention to detail", "Computer access"],
+        benefits: ["Work from home", "Online payments", "Flexible hours"]
+    },
+    {
+        id: 12,
+        title: "Virtual Assistant for Retail",
+        company: "Philly Commerce",
+        location: "Philadelphia, PA",
+        type: "Part-time",
+        salary: "$5 - $12",
+        experience: "Mid Level",
+        remote: "Remote",
+        tags: ["Virtual Assistant", "Admin", "Customer Service"],
+        logo: "/api/placeholder/60/60",
+        date: "3 days ago",
+        description: "Provide administrative support for Philadelphia retail businesses.",
+        responsibilities: ["Schedule appointments", "Manage emails", "Organize tasks"],
+        requirements: ["Good organizational skills", "Google Suite knowledge", "Reliable internet"],
+        benefits: ["Remote work", "PayPal payments", "Flexible schedule"]
+    },
+    {
+        id: 13,
+        title: "Research Test for Market Analysis",
+        company: "Houston Insights",
+        location: "Houston, TX",
+        type: "Freelance",
+        salary: "$3 - $7",
+        experience: "Entry Level",
+        remote: "Remote",
+        tags: ["Research", "Data Collection", "Analysis"],
+        logo: "/api/placeholder/60/60",
         date: "1 day ago",
-        description: "Enter data like customer names or sales into spreadsheets for Kenyan businesses.",
-        responsibilities: [
-            "Input 20–50 data points",
-            "Use Google Sheets",
-            "Deliver via email"
-        ],
-        requirements: [
-            "Basic Excel skills",
-            "Internet access",
-            "Smartphone/laptop"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Flexible hours",
-            "Learn data skills"
-        ]
+        description: "Collect data for market research projects for Houston-based companies.",
+        responsibilities: ["Gather online data", "Compile reports", "Submit via email"],
+        requirements: ["Basic research skills", "Internet access", "No experience needed"],
+        benefits: ["Work from home", "Online payments", "Quick tasks"]
+    },
+    {
+        id: 14,
+        title: "Answer Geography Questions",
+        company: "Phoenix Education",
+        location: "Phoenix, AZ",
+        type: "Part-time",
+        salary: "$3 - $8",
+        experience: "Entry Level",
+        remote: "Remote",
+        tags: ["Geography", "Tutoring", "Education"],
+        logo: "/api/placeholder/60/60",
+        date: "2 days ago",
+        description: "Answer geography-related questions for online students in Arizona.",
+        responsibilities: ["Solve 5–10 questions daily", "Provide clear explanations", "Submit online"],
+        requirements: ["Knowledge of geography", "High school diploma", "Internet access"],
+        benefits: ["Flexible hours", "Online payments", "Build teaching skills"]
+    },
+    {
+        id: 15,
+        title: "Write Blog Posts",
+        company: "San Diego Media",
+        location: "San Diego, CA",
+        type: "Freelance",
+        salary: "$8 - $18",
+        experience: "Mid Level",
+        remote: "Remote",
+        tags: ["Writing", "Blogging", "SEO"],
+        logo: "/api/placeholder/60/60",
+        date: "3 days ago",
+        description: "Write 500-word blog posts for San Diego businesses, focusing on SEO.",
+        responsibilities: ["Write 1–2 posts weekly", "Incorporate keywords", "Submit via Google Docs"],
+        requirements: ["Good writing skills", "Basic SEO knowledge", "Computer access"],
+        benefits: ["Work from home", "PayPal payments", "Portfolio growth"]
+    },
+    {
+        id: 16,
+        title: "Design Social Media Graphics",
+        company: "Dallas Creative Studio",
+        location: "Dallas, TX",
+        type: "Freelance",
+        salary: "$5 - $15",
+        experience: "Entry Level",
+        remote: "Remote",
+        tags: ["Canva", "Graphic Design", "Social Media"],
+        logo: "/api/placeholder/60/60",
+        date: "1 day ago",
+        description: "Create graphics for social media posts for Dallas-based businesses.",
+        responsibilities: ["Design 3–5 graphics weekly", "Use Canva", "Deliver via cloud"],
+        requirements: ["Basic design skills", "Free Canva account", "Creative mindset"],
+        benefits: ["Flexible tasks", "Online payments", "Work from home"]
     },
     {
         id: 17,
-        title: "Organize Emails",
-        company: "Mombasa Admin",
-        location: "Mombasa, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 700",
+        title: "Test Mobile Apps",
+        company: "Columbus Tech Hub",
+        location: "Columbus, OH",
+        type: "Part-time",
+        salary: "$3 - $8",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["Email", "Admin", "Organization"],
+        tags: ["Testing", "Mobile Apps", "QA"],
         logo: "/api/placeholder/60/60",
         date: "2 days ago",
-        description: "Sort and label 20–50 emails for Kenyan startups using Gmail.",
-        responsibilities: [
-            "Sort 20 emails",
-            "Label by category",
-            "Report via WhatsApp"
-        ],
-        requirements: [
-            "Gmail familiarity",
-            "Basic organization skills",
-            "Internet access"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Quick tasks",
-            "Learn admin skills"
-        ]
+        description: "Test mobile apps for functionality for Ohio-based startups.",
+        responsibilities: ["Test app features", "Report bugs", "Provide feedback"],
+        requirements: ["Smartphone or tablet", "Basic tech skills", "Attention to detail"],
+        benefits: ["Work from home", "Online payments", "Flexible hours"]
     },
     {
         id: 18,
-        title: "Fill Online Forms",
-        company: "Eldoret Services",
-        location: "Eldoret, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 600",
-        experience: "Entry Level",
-        remote: "Remote",
-        tags: ["Forms", "Admin", "Data"],
+        title: "Manage Email Campaigns",
+        company: "Indy Digital Solutions",
+        location: "Indianapolis, IN",
+        type: "Part-time",
+        salary: "$8 - $20",
+        experience: "Mid Level",
+        remote: "Hybrid",
+        tags: ["Email Marketing", "Communication", "Digital Marketing"],
         logo: "/api/placeholder/60/60",
-        date: "3 days ago",
-        description: "Fill 5–10 online forms for Kenyan businesses like loan applications.",
-        responsibilities: [
-            "Complete 5 forms",
-            "Enter accurate data",
-            "Deliver via email"
-        ],
-        requirements: [
-            "Basic computer skills",
-            "Internet access",
-            "Attention to detail"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Quick tasks",
-            "Support local businesses"
-        ]
+        date: "4 days ago",
+        description: "Manage email campaigns for Indianapolis businesses using platforms like Mailchimp.",
+        responsibilities: ["Create email templates", "Send 2–3 campaigns weekly", "Track performance"],
+        requirements: ["Email marketing experience", "Access to marketing tools", "Good communication"],
+        benefits: ["Hybrid work", "Online payments", "Marketing skills growth"]
     },
     {
         id: 19,
-        title: "Schedule Social Media Posts",
-        company: "Nakuru Digital",
-        location: "Nakuru, Kenya",
+        title: "Answer Science Questions",
+        company: "Jacksonville Education",
+        location: "Jacksonville, FL",
         type: "Freelance",
-        salary: "KES 300 - 700",
+        salary: "$3 - $8",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["Social Media", "Scheduling", "Marketing"],
+        tags: ["Science", "Tutoring", "Education"],
         logo: "/api/placeholder/60/60",
         date: "1 day ago",
-        description: "Queue 5–10 social media posts for Kenyan brands using Buffer.",
-        responsibilities: [
-            "Schedule 5 posts",
-            "Use client content",
-            "Confirm via WhatsApp"
-        ],
-        requirements: [
-            "Social media familiarity",
-            "Free Buffer account",
-            "Internet access"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Learn marketing",
-            "Flexible hours"
-        ]
+        description: "Solve science questions (biology, chemistry) for Florida students online.",
+        responsibilities: ["Answer 5–10 questions daily", "Explain answers clearly", "Submit online"],
+        requirements: ["Science knowledge", "High school diploma", "Reliable internet"],
+        benefits: ["Flexible schedule", "PayPal payments", "Work from home"]
     },
     {
         id: 20,
-        title: "List Contacts",
-        company: "Nairobi Networks",
-        location: "Nairobi, Kenya",
+        title: "Edit Product Photos",
+        company: "San Antonio Retail",
+        location: "San Antonio, TX",
         type: "Freelance",
-        salary: "KES 300 - 1,000",
+        salary: "$5 - $12",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["Research", "Contacts", "Admin"],
+        tags: ["Photo Editing", "Canva", "E-Commerce"],
         logo: "/api/placeholder/60/60",
         date: "2 days ago",
-        description: "Find 10–20 emails or phone numbers for Kenyan businesses online.",
-        responsibilities: [
-            "Research 10 contacts",
-            "List in Google Sheets",
-            "Deliver via email"
-        ],
-        requirements: [
-            "Basic Google skills",
-            "Internet access",
-            "Smartphone/laptop"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Quick tasks",
-            "Learn research skills"
-        ]
+        description: "Edit product images for San Antonio e-commerce stores using Canva or Photoshop.",
+        responsibilities: ["Edit 10–20 images", "Enhance visuals", "Deliver via cloud"],
+        requirements: ["Basic editing skills", "Editing tools", "Attention to detail"],
+        benefits: ["Work from home", "PayPal payments", "Flexible tasks"]
     },
+    // New 21 task types
     {
         id: 21,
-        title: "Upload Blog Posts",
-        company: "Kenya Bloggers",
-        location: "Nairobi, Kenya",
+        title: "Transcribe Audio Clips",
+        company: "Atlanta Media Group",
+        location: "Atlanta, GA",
         type: "Freelance",
-        salary: "KES 300 - 1,200",
+        salary: "$5 - $12",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["WordPress", "Website", "Content"],
+        tags: ["Transcription", "Audio", "Typing"],
         logo: "/api/placeholder/60/60",
         date: "1 day ago",
-        description: "Upload text/images to WordPress for Kenyan blogs like travel or tech sites.",
-        responsibilities: [
-            "Upload 1 blog post",
-            "Add images and format",
-            "Confirm via email"
-        ],
-        requirements: [
-            "Basic computer skills",
-            "Internet access",
-            "Free WordPress trial"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Learn website skills",
-            "Flexible hours"
-        ]
+        description: "Transcribe short audio clips for Atlanta-based podcasts or businesses.",
+        responsibilities: ["Transcribe 5–10 minutes of audio", "Ensure accuracy", "Submit via email"],
+        requirements: ["Good listening skills", "Typing proficiency", "Internet access"],
+        benefits: ["Flexible hours", "PayPal payments", "Work from home"]
     },
     {
         id: 22,
-        title: "Basic Website Testing",
-        company: "Mombasa Tech",
-        location: "Mombasa, Kenya",
+        title: "Create Infographics",
+        company: "Portland Creative",
+        location: "Portland, OR",
         type: "Freelance",
-        salary: "KES 300 - 800",
-        experience: "Entry Level",
+        salary: "$8 - $20",
+        experience: "Mid Level",
         remote: "Remote",
-        tags: ["Website", "Testing", "QA"],
+        tags: ["Canva", "Infographics", "Design"],
         logo: "/api/placeholder/60/60",
         date: "2 days ago",
-        description: "Test Kenyan websites for broken links or errors by clicking through pages.",
-        responsibilities: [
-            "Test 5 pages",
-            "Report issues",
-            "Deliver via WhatsApp"
-        ],
-        requirements: [
-            "Basic browsing skills",
-            "Internet access",
-            "Smartphone/laptop"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Quick tasks",
-            "Learn QA skills"
-        ]
+        description: "Design infographics for Portland businesses to use in marketing materials.",
+        responsibilities: ["Create 1–2 infographics", "Use Canva or similar", "Deliver via cloud"],
+        requirements: ["Design experience", "Canva proficiency", "Creative mindset"],
+        benefits: ["Work from home", "Online payments", "Portfolio growth"]
     },
     {
         id: 23,
-        title: "Add Product Listings",
-        company: "Kilimall Freelance",
-        location: "Nairobi, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 1,000",
+        title: "Answer History Questions",
+        company: "Vegas Education Hub",
+        location: "Las Vegas, NV",
+        type: "Part-time",
+        salary: "$3 - $8",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["E-commerce", "Website", "Data"],
+        tags: ["History", "Tutoring", "Education"],
         logo: "/api/placeholder/60/60",
         date: "3 days ago",
-        description: "Add 5–10 products to Kenyan e-commerce sites like Kilimall.",
-        responsibilities: [
-            "Enter 5 product details",
-            "Upload images",
-            "Deliver via email"
-        ],
-        requirements: [
-            "Basic computer skills",
-            "Internet access",
-            "Attention to detail"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Support e-commerce",
-            "Flexible hours"
-        ]
+        description: "Answer history questions for online students in Las Vegas.",
+        responsibilities: ["Solve 5–10 questions daily", "Provide clear explanations", "Submit online"],
+        requirements: ["History knowledge", "High school diploma", "Internet access"],
+        benefits: ["Flexible schedule", "PayPal payments", "Work from home"]
     },
     {
         id: 24,
-        title: "Update Website Text",
-        company: "Eldoret Web",
-        location: "Eldoret, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 800",
+        title: "Moderate Online Forums",
+        company: "Charlotte Tech Community",
+        location: "Charlotte, NC",
+        type: "Part-time",
+        salary: "$5 - $10",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["Website", "Editing", "Content"],
+        tags: ["Moderation", "Community Management", "Online"],
         logo: "/api/placeholder/60/60",
         date: "1 day ago",
-        description: "Edit 100–200 words on Kenyan websites like NGO homepages.",
-        responsibilities: [
-            "Edit 1 section of text",
-            "Ensure clarity",
-            "Confirm via email"
-        ],
-        requirements: [
-            "English fluency",
-            "Internet access",
-            "Basic editing skills"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Quick tasks",
-            "Learn web editing"
-        ]
+        description: "Moderate forums for Charlotte-based tech communities to ensure positive engagement.",
+        responsibilities: ["Monitor posts", "Remove spam", "Engage users"],
+        requirements: ["Good communication", "Basic tech skills", "Reliable internet"],
+        benefits: ["Work from home", "Online payments", "Flexible hours"]
     },
     {
         id: 25,
-        title: "Social Media Page Setup",
-        company: "Nakuru Social",
-        location: "Nakuru, Kenya",
+        title: "Test Website Usability",
+        company: "Boston Digital Labs",
+        location: "Boston, MA",
         type: "Freelance",
-        salary: "KES 300 - 1,000",
+        salary: "$5 - $12",
         experience: "Entry Level",
         remote: "Remote",
-        tags: ["Social Media", "Website", "Marketing"],
+        tags: ["Usability Testing", "QA", "Web"],
         logo: "/api/placeholder/60/60",
         date: "2 days ago",
-        description: "Set up basic Facebook/Instagram pages for Kenyan businesses.",
-        responsibilities: [
-            "Create 1 page",
-            "Add bio and logo",
-            "Deliver via WhatsApp"
-        ],
-        requirements: [
-            "Social media familiarity",
-            "Internet access",
-            "Smartphone/laptop"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Learn marketing",
-            "Flexible hours"
-        ]
+        description: "Test website usability for Boston-based startups to improve user experience.",
+        responsibilities: ["Navigate websites", "Report issues", "Provide feedback"],
+        requirements: ["Basic tech skills", "Attention to detail", "Internet access"],
+        benefits: ["Flexible tasks", "PayPal payments", "Work from home"]
     },
-    {
-        id: 26,
-        title: "Complete Online Surveys",
-        company: "Kenya Surveys",
-        location: "Nairobi, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 500",
-        experience: "Entry Level",
-        remote: "Remote",
-        tags: ["Surveys", "Microtasks", "Feedback"],
-        logo: "/api/placeholder/60/60",
-        date: "1 day ago",
-        description: "Complete 5–10 short surveys on Kenyan products or services.",
-        responsibilities: [
-            "Answer 5 questions",
-            "Provide honest feedback",
-            "Submit via platform"
-        ],
-        requirements: [
-            "Smartphone access",
-            "Internet connection",
-            "Basic English"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Quick tasks",
-            "No skills needed"
-        ]
-    },
-    {
-        id: 27,
-        title: "Tag Images for AI",
-        company: "Mombasa AI Hub",
-        location: "Mombasa, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 700",
-        experience: "Entry Level",
-        remote: "Remote",
-        tags: ["AI", "Images", "Microtasks"],
-        logo: "/api/placeholder/60/60",
-        date: "2 days ago",
-        description: "Label 20–50 images (e.g., ‘maize’ or ‘matatu’) for AI training.",
-        responsibilities: [
-            "Tag 20 images",
-            "Follow guidelines",
-            "Deliver via platform"
-        ],
-        requirements: [
-            "Smartphone/laptop",
-            "Internet access",
-            "Attention to detail"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Quick tasks",
-            "Learn AI basics"
-        ]
-    },
-    {
-        id: 28,
-        title: "Review Mobile Apps",
-        company: "Nairobi Tech Reviews",
-        location: "Nairobi, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 800",
-        experience: "Entry Level",
-        remote: "Remote",
-        tags: ["Apps", "Reviews", "Testing"],
-        logo: "/api/placeholder/60/60",
-        date: "3 days ago",
-        description: "Write 50-word reviews for Kenyan apps after testing.",
-        responsibilities: [
-            "Test 1 app",
-            "Write 50-word review",
-            "Submit via email"
-        ],
-        requirements: [
-            "Smartphone access",
-            "Basic English",
-            "Internet connection"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Quick tasks",
-            "Discover new apps"
-        ]
-    },
-    {
-        id: 29,
-        title: "Categorize Market Data",
-        company: "Kisumu Analytics",
-        location: "Kisumu, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 700",
-        experience: "Entry Level",
-        remote: "Remote",
-        tags: ["Data", "Microtasks", "Organization"],
-        logo: "/api/placeholder/60/60",
-        date: "1 day ago",
-        description: "Sort 20–50 items (e.g., farm products) into categories for Kenyan markets.",
-        responsibilities: [
-            "Sort 20 items",
-            "Use Google Sheets",
-            "Deliver via email"
-        ],
-        requirements: [
-            "Basic Excel skills",
-            "Internet access",
-            "Smartphone/laptop"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Quick tasks",
-            "Learn data skills"
-        ]
-    },
-    {
-        id: 30,
-        title: "Add Video Subtitles",
-        company: "Eldoret Media Hub",
-        location: "Eldoret, Kenya",
-        type: "Freelance",
-        salary: "KES 300 - 1,200",
-        experience: "Entry Level",
-        remote: "Remote",
-        tags: ["Subtitles", "Video", "Swahili"],
-        logo: "/api/placeholder/60/60",
-        date: "2 days ago",
-        description: "Add subtitles to 2–5 min Kenyan videos in English/Swahili.",
-        responsibilities: [
-            "Add subtitles to 1 video",
-            "Use free tools",
-            "Deliver via email"
-        ],
-        requirements: [
-            "English/Swahili fluency",
-            "Free Aegisub software",
-            "Internet access"
-        ],
-        benefits: [
-            "M-Pesa payments",
-            "Flexible hours",
-            "Learn video editing"
-        ]
-    }
+    // Remaining 135 jobs, programmatically generated with random distribution of 41 tasks
+    ...Array.from({ length: 135 }, (_, i) => {
+        const states = [
+            "New York, NY", "Los Angeles, CA", "Chicago, IL", "Houston, TX", "Phoenix, AZ",
+            "Philadelphia, PA", "San Antonio, TX", "San Diego, CA", "Dallas, TX", "San Jose, CA",
+            "Austin, TX", "Jacksonville, FL", "San Francisco, CA", "Columbus, OH", "Indianapolis, IN",
+            "Seattle, WA", "Denver, CO", "Boston, MA", "Nashville, TN", "Miami, FL",
+            "Atlanta, GA", "Portland, OR", "Las Vegas, NV", "Charlotte, NC", "Minneapolis, MN"
+        ];
+        const jobTitles = [
+            "Design Simple Logo", "Answer Math Questions", "Write Product Reviews", "Edit Short Videos",
+            "Reply to YouTube Comments", "Manage Social Media Posts", "Photo Editing for E-Commerce",
+            "Texting Customer Support on WhatsApp", "Answer Short Survey Questions", "Reply to TikTok Comments",
+            "Data Entry for Startups", "Virtual Assistant for Retail", "Research Test for Market Analysis",
+            "Answer Geography Questions", "Write Blog Posts", "Design Social Media Graphics",
+            "Test Mobile Apps", "Manage Email Campaigns", "Answer Science Questions", "Edit Product Photos",
+            "Transcribe Audio Clips", "Create Infographics", "Answer History Questions", "Moderate Online Forums",
+            "Test Website Usability", "Write Email Copy", "Create Presentation Slides", "Monitor Social Media Analytics",
+            "Answer English Literature Questions", "Edit Podcasts", "Create Instagram Reels", "Answer Basic Coding Questions",
+            "Write Product Descriptions", "Test Game Apps", "Manage Google Ads", "Answer Economics Questions",
+            "Create Flyers", "Proofread Content", "Answer Physics Questions", "Create Basic Website Mockups",
+            "Schedule Social Media Ads"
+        ];
+        const companies = [
+            "Cityscape Designs", "TechTrend Innovations", "Urban Media Co", "Starlight Tech",
+            "Creative Solutions", "Digital Wave", "NextGen Startups", "Bright Path Marketing",
+            "Metro Analytics", "Sunrise Media", "Blue Sky Creations", "Horizon Tech",
+            "Skyline Education", "Peak Digital", "Urban Insights"
+        ];
+        const types = ["Freelance", "Part-time"];
+        const experiences = ["Entry Level", "Mid Level"];
+        const remotes = ["Remote", "Hybrid", "On-site"];
+        const tagSets = [
+            ["Canva", "Graphic Design"], ["Math", "Tutoring"], ["Writing", "Reviews"],
+            ["Video Editing", "Content Creation"], ["Social Media", "YouTube"], ["Social Media", "Marketing"],
+            ["Photo Editing", "Photoshop"], ["Customer Support", "WhatsApp"], ["Surveys", "Research"],
+            ["Social Media", "TikTok"], ["Data Entry", "Excel"], ["Virtual Assistant", "Admin"],
+            ["Research", "Analysis"], ["Geography", "Education"], ["Writing", "SEO"],
+            ["Canva", "Social Media"], ["Testing", "QA"], ["Email Marketing", "Digital Marketing"],
+            ["Science", "Tutoring"], ["Photo Editing", "Canva"], ["Transcription", "Audio"],
+            ["Canva", "Infographics"], ["History", "Tutoring"], ["Moderation", "Community"],
+            ["Usability Testing", "QA"], ["Writing", "Email Marketing"], ["PowerPoint", "Design"],
+            ["Social Media", "Analytics"], ["English", "Tutoring"], ["Podcast Editing", "Audio"],
+            ["Social Media", "Instagram"], ["Coding", "Tutoring"], ["Writing", "E-Commerce"],
+            ["Testing", "Gaming"], ["Google Ads", "Marketing"], ["Economics", "Tutoring"],
+            ["Canva", "Flyers"], ["Proofreading", "Writing"], ["Physics", "Tutoring"],
+            ["Web Design", "Mockups"], ["Social Media", "Advertising"]
+        ];
+        const descriptions = [
+            `Create logos for small businesses in {city} using Canva.`,
+            `Solve math problems (algebra, calculus) for students in {city}.`,
+            `Write reviews for products sold by {city} online stores.`,
+            `Edit short video clips for {city} businesses’ social media.`,
+            `Respond to comments on YouTube videos for {city} creators.`,
+            `Schedule social media posts for {city} startups.`,
+            `Edit product photos for {city} e-commerce stores.`,
+            `Provide customer support via WhatsApp for {city} companies.`,
+            `Complete survey questions for {city} market research firms.`,
+            `Engage with TikTok comments for {city} influencers.`,
+            `Enter data into spreadsheets for {city} startups.`,
+            `Provide administrative support for {city} retail businesses.`,
+            `Collect data for market research in {city}.`,
+            `Answer geography questions for {city} students online.`,
+            `Write blog posts for {city} businesses with SEO focus.`,
+            `Design graphics for social media for {city} companies.`,
+            `Test mobile apps for {city} startups.`,
+            `Manage email campaigns for {city} businesses.`,
+            `Solve science questions for {city} students online.`,
+            `Edit product images for {city} e-commerce stores.`,
+            `Transcribe audio clips for {city} podcasts or businesses.`,
+            `Create infographics for {city} marketing campaigns.`,
+            `Answer history questions for {city} students online.`,
+            `Moderate forums for {city} tech communities.`,
+            `Test website usability for {city} startups.`,
+            `Write email copy for {city} businesses’ marketing.`,
+            `Create presentation slides for {city} companies.`,
+            `Monitor social media analytics for {city} brands.`,
+            `Answer English literature questions for {city} students.`,
+            `Edit podcasts for {city} content creators.`,
+            `Create Instagram Reels for {city} influencers.`,
+            `Answer basic coding questions for {city} students.`,
+            `Write product descriptions for {city} e-commerce stores.`,
+            `Test game apps for {city} developers.`,
+            `Manage Google Ads for {city} businesses.`,
+            `Answer economics questions for {city} students.`,
+            `Create flyers for {city} events or businesses.`,
+            `Proofread content for {city} websites or blogs.`,
+            `Answer physics questions for {city} students.`,
+            `Create basic website mockups for {city} startups.`,
+            `Schedule social media ads for {city} brands.`
+        ];
+        const responsibilities = [
+            ["Design based on brief", "Use Canva", "Deliver files"],
+            ["Solve 5–10 questions", "Explain solutions", "Submit online"],
+            ["Write 100–200 word reviews", "Highlight features", "Submit via email"],
+            ["Trim and enhance videos", "Add captions", "Deliver via cloud"],
+            ["Reply to 20–50 comments", "Positive tone", "Follow guidelines"],
+            ["Create 3–5 posts weekly", "Use scheduling tools", "Engage followers"],
+            ["Edit 10–20 images", "Remove backgrounds", "Deliver via cloud"],
+            ["Respond to queries", "Follow scripts", "Log interactions"],
+            ["Answer 10–20 questions", "Provide feedback", "Submit online"],
+            ["Reply to 20–50 comments", "Positive tone", "Follow guidelines"],
+            ["Input 50–100 records", "Ensure accuracy", "Submit via cloud"],
+            ["Schedule appointments", "Manage emails", "Organize tasks"],
+            ["Gather online data", "Compile reports", "Submit via email"],
+            ["Solve 5–10 questions", "Explain answers", "Submit online"],
+            ["Write 1–2 posts weekly", "Incorporate keywords", "Submit via Google Docs"],
+            ["Design 3–5 graphics", "Use Canva", "Deliver via cloud"],
+            ["Test app features", "Report bugs", "Provide feedback"],
+            ["Create email templates", "Send campaigns", "Track performance"],
+            ["Solve 5–10 questions", "Explain answers", "Submit online"],
+            ["Edit 10–20 images", "Enhance visuals", "Deliver via cloud"],
+            ["Transcribe 5–10 minutes", "Ensure accuracy", "Submit via email"],
+            ["Create 1–2 infographics", "Use Canva", "Deliver via cloud"],
+            ["Solve 5–10 questions", "Explain answers", "Submit online"],
+            ["Monitor posts", "Remove spam", "Engage users"],
+            ["Navigate websites", "Report issues", "Provide feedback"],
+            ["Write 2–3 email copies", "Follow brand tone", "Submit via email"],
+            ["Design 5–10 slides", "Use PowerPoint", "Deliver via cloud"],
+            ["Track analytics", "Generate reports", "Submit weekly"],
+            ["Solve 5–10 questions", "Explain answers", "Submit online"],
+            ["Edit 10–20 minutes of audio", "Enhance quality", "Deliver via cloud"],
+            ["Create 1–2 Reels", "Use editing tools", "Deliver via platform"],
+            ["Answer 5–10 questions", "Explain code", "Submit online"],
+            ["Write 5–10 descriptions", "Highlight features", "Submit via email"],
+            ["Test game features", "Report bugs", "Provide feedback"],
+            ["Set up 1–2 ad campaigns", "Monitor performance", "Submit reports"],
+            ["Solve 5–10 questions", "Explain answers", "Submit online"],
+            ["Design 1–2 flyers", "Use Canva", "Deliver via cloud"],
+            ["Proofread 500–1000 words", "Correct errors", "Submit via email"],
+            ["Solve 5–10 questions", "Explain answers", "Submit online"],
+            ["Create 1–2 mockups", "Use Figma or Canva", "Deliver via cloud"],
+            ["Schedule 2–3 ads", "Use ad platforms", "Track performance"]
+        ];
+        const requirements = [
+            ["Basic design skills", "Canva account", "No experience needed"],
+            ["Strong math skills", "High school diploma", "Reliable internet"],
+            ["Good writing skills", "Attention to detail", "Computer access"],
+            ["Editing tool experience", "Creative skills", "Reliable internet"],
+            ["Communication skills", "YouTube account", "Reliable internet"],
+            ["Social media experience", "Canva or similar", "Good communication"],
+            ["Basic editing skills", "Editing software", "Attention to detail"],
+            ["Smartphone with WhatsApp", "Typing skills", "Reliable internet"],
+            ["Basic computer skills", "Internet access", "No experience needed"],
+            ["TikTok account", "Communication skills", "Reliable internet"],
+            ["Basic Excel skills", "Attention to detail", "Computer access"],
+            ["Organizational skills", "Google Suite knowledge", "Reliable internet"],
+            ["Basic research skills", "Internet access", "No experience needed"],
+            ["Geography knowledge", "High school diploma", "Internet access"],
+            ["Writing skills", "Basic SEO knowledge", "Computer access"],
+            ["Basic design skills", "Canva account", "Creative mindset"],
+            ["Smartphone or tablet", "Basic tech skills", "Attention to detail"],
+            ["Email marketing experience", "Marketing tools", "Good communication"],
+            ["Science knowledge", "High school diploma", "Reliable internet"],
+            ["Basic editing skills", "Editing tools", "Attention to detail"],
+            ["Listening skills", "Typing proficiency", "Internet access"],
+            ["Design experience", "Canva proficiency", "Creative mindset"],
+            ["History knowledge", "High school diploma", "Internet access"],
+            ["Communication skills", "Basic tech skills", "Reliable internet"],
+            ["Basic tech skills", "Attention to detail", "Internet access"],
+            ["Writing skills", "Brand awareness", "Computer access"],
+            ["PowerPoint skills", "Design sense", "Internet access"],
+            ["Analytics experience", "Social media knowledge", "Reliable internet"],
+            ["English knowledge", "High school diploma", "Internet access"],
+            ["Audio editing skills", "Editing software", "Reliable internet"],
+            ["Video editing skills", "Instagram knowledge", "Creative mindset"],
+            ["Basic coding knowledge", "High school diploma", "Internet access"],
+            ["Writing skills", "E-commerce knowledge", "Computer access"],
+            ["Gaming interest", "Basic tech skills", "Attention to detail"],
+            ["Ad platform experience", "Marketing knowledge", "Reliable internet"],
+            ["Economics knowledge", "High school diploma", "Internet access"],
+            ["Design skills", "Canva account", "Creative mindset"],
+            ["Proofreading skills", "Attention to detail", "Computer access"],
+            ["Physics knowledge", "High school diploma", "Internet access"],
+            ["Web design basics", "Figma or Canva", "Creative mindset"],
+            ["Ad scheduling experience", "Social media knowledge", "Reliable internet"]
+        ];
+        const salaries = [
+            "$5 - $15", "$3 - $8", "$3 - $7", "$8 - $20", "$2 - $5",
+            "$8 - $18", "$5 - $12", "$3 - $7", "$2 - $4", "$2 - $5",
+            "$3 - $8", "$5 - $12", "$3 - $7", "$3 - $8", "$8 - $18",
+            "$5 - $15", "$3 - $8", "$8 - $20", "$3 - $8", "$5 - $12",
+            "$5 - $12", "$8 - $20", "$3 - $8", "$5 - $10", "$5 - $12",
+            "$5 - $10", "$5 - $15", "$5 - $12", "$3 - $8", "$8 - $20",
+            "$5 - $15", "$3 - $8", "$5 - $10", "$5 - $12", "$8 - $23",
+            "$3 - $8", "$5 - $12", "$5 - $10", "$3 - $8", "$8 - $20",
+            "$5 - $15"
+        ];
+
+        const index = Math.floor(Math.random() * jobTitles.length);
+        const isRemote = i < 124 ? "Remote" : remotes[Math.floor(Math.random() * remotes.length)]; // Ensure 144 remote jobs
+        const location = states[Math.floor(Math.random() * states.length)];
+        return {
+            id: i + 26,
+            title: jobTitles[index],
+            company: companies[Math.floor(Math.random() * companies.length)],
+            location: location,
+            type: types[Math.floor(Math.random() * types.length)],
+            salary: salaries[index],
+            experience: experiences[Math.floor(Math.random() * experiences.length)],
+            remote: isRemote,
+            tags: tagSets[index],
+            logo: "/api/placeholder/60/60",
+            date: `${Math.floor(1 + Math.random() * 5)} days ago`,
+            description: descriptions[index].replace("{city}", location.split(",")[0]),
+            responsibilities: responsibilities[index],
+            requirements: requirements[index],
+            benefits: ["Flexible hours", "Online payments", isRemote === "Remote" ? "Work from home" : "Career growth"]
+        };
+    })
 ];
 
-// DOM Elements for job listings and UI components
+// Verify 159 remote jobs
+const remoteCount = jobsData.filter(job => job.remote === "Remote").length;
+console.log(`Remote jobs: ${remoteCount}`); // Should be ~144
+
+// DOM Elements
 const DOM = {
     jobsList: document.getElementById('jobs-list'),
     jobModal: document.getElementById('job-modal'),
     modalJobContent: document.getElementById('modal-job-content'),
-    loginModal: document.getElementById('login-modal'),
-    closeButtons: document.querySelectorAll('.close'),
     salaryRange: document.getElementById('salary-range'),
     salaryValue: document.getElementById('salary-value'),
     jobSearch: document.getElementById('job-search'),
     locationSearch: document.getElementById('location-search'),
     searchBtn: document.querySelector('.search-btn'),
-    loginBtn: document.querySelector('.btn-outline'),
-    postJobBtn: document.querySelector('.btn-primary'),
     sortSelect: document.getElementById('sort-by'),
     navToggle: document.querySelector('.nav-toggle'),
     nav: document.querySelector('nav'),
-    paginationContainer: document.createElement('div')
+    paginationContainer: document.querySelector('.pagination-container'),
+    prevPage: document.querySelector('.prev-page'),
+    nextPage: document.querySelector('.next-page'),
+    paginationNumbers: document.querySelector('.pagination-numbers'),
+    clearFilters: document.querySelector('.clear-filters'),
+    popularSearches: document.querySelectorAll('.popular-searches a'),
 };
 
-// Initialize pagination container
-DOM.paginationContainer.className = 'pagination';
-if (DOM.jobsList) DOM.jobsList.after(DOM.paginationContainer);
-
-// Pagination settings
+// ================================
+// Pagination & Jobs
+// ================================
 const jobsPerPage = 5;
 let currentPage = 1;
-let currentFilteredJobs = [...jobsData]; // Cache filtered/sorted jobs
+let currentFilteredJobs = [...jobsData]; // Assuming jobsData is defined globally
 
-// Initialize the page
+// ================================
+// Page Init
+// ================================
 document.addEventListener('DOMContentLoaded', () => {
-    if (!DOM.jobsList) {
-        console.error('Jobs list element not found');
-        return;
-    }
-    renderJobs(getPaginatedJobs(jobsData));
-    setupEventListeners();
+    if (!DOM.jobsList) return console.error('Jobs list element not found');
     initRangeSlider();
-    renderPagination(jobsData);
+    setupEventListeners();
+    updateJobs();
 });
 
-// Get jobs for the current page
-const getPaginatedJobs = (jobs) => {
+// ================================
+// Master Controller
+// ================================
+function updateJobs() {
+    let filtered = applyFilters(jobsData);
+    filtered = applySearch(filtered);
+    filtered = applySorting(filtered);
+    currentFilteredJobs = filtered;
+
+    const paginated = getPaginatedJobs(filtered);
+    renderJobs(paginated);
+    renderPagination(filtered);
+    const jobCountEl = document.getElementById('job-count');
+    if (jobCountEl) jobCountEl.textContent = `(${filtered.length})`;
+}
+
+// ================================
+// Pagination Logic
+// ================================
+function getPaginatedJobs(jobs) {
     const start = (currentPage - 1) * jobsPerPage;
     const end = start + jobsPerPage;
     return jobs.slice(start, end);
-};
+}
 
-// Render job cards
-const renderJobs = (jobs) => {
-    if (!DOM.jobsList) {
-        console.error('Jobs list element not found');
-        return;
+// ================================
+// Filters
+// ================================
+function applyFilters(jobs) {
+    const jobTypes = Array.from(document.querySelectorAll('input[name="job-type"]:checked')).map(el => el.value.toLowerCase());
+    const experiences = Array.from(document.querySelectorAll('input[name="experience"]:checked')).map(el => el.value.toLowerCase());
+    const remoteOptions = Array.from(document.querySelectorAll('input[name="remote"]:checked')).map(el => el.value.toLowerCase());
+    const minSalary = parseInt(DOM.salaryRange.value) || 2;
+
+    return jobs.filter(job => {
+        const jobType = (job.type || '').toLowerCase();
+        const jobExperience = (job.experience || '').toLowerCase();
+        const jobRemote = (job.remote || '').toLowerCase();
+
+        const matchesType = jobTypes.length === 0 || jobTypes.includes(jobType);
+        const matchesExperience = experiences.length === 0 || experiences.includes(jobExperience);
+        const matchesRemote = remoteOptions.length === 0 || remoteOptions.includes(jobRemote);
+
+        const salaryMatch = job.salary.match(/\$(\d+)[^\d]*(\d+)?/);
+        const jobMin = parseInt(salaryMatch?.[1]) || 0;
+        const jobMax = parseInt(salaryMatch?.[2]) || jobMin;
+        const matchesSalary = jobMax >= minSalary;
+
+        return matchesType && matchesExperience && matchesRemote && matchesSalary;
+    });
+}
+
+// ================================
+// Search
+// ================================
+function applySearch(jobs) {
+    const searchTerm = DOM.jobSearch.value.toLowerCase().trim();
+    const locationTerm = DOM.locationSearch.value.toLowerCase().trim();
+
+    return jobs.filter(job => {
+        const title = job.title?.toLowerCase() || '';
+        const company = job.company?.toLowerCase() || '';
+        const tags = job.tags?.map(t => t.toLowerCase()) || [];
+        const location = job.location?.toLowerCase() || '';
+        const remote = job.remote?.toLowerCase() || '';
+
+        const matchesSearch =
+            !searchTerm ||
+            title.includes(searchTerm) ||
+            company.includes(searchTerm) ||
+            tags.some(tag => tag.includes(searchTerm));
+
+        const matchesLocation =
+            !locationTerm ||
+            location.includes(locationTerm) ||
+            (locationTerm.includes('remote') && remote === 'remote');
+
+        return matchesSearch && matchesLocation;
+    });
+}
+
+// ================================
+// Sorting
+// ================================
+function applySorting(jobs) {
+    const sortBy = DOM.sortSelect.value;
+    const sorted = [...jobs];
+
+    switch (sortBy) {
+        case 'recent':
+            return sorted.sort((a, b) => {
+                const aTime = a.date.includes('day') ? parseInt(a.date) : 14;
+                const bTime = b.date.includes('day') ? parseInt(b.date) : 14;
+                return bTime - aTime;
+            });
+        case 'salary-high':
+            return sorted.sort((a, b) => {
+                const aMax = parseInt(a.salary.match(/\$(\d+)[^\d]*(\d+)/)?.[2] || a.salary.match(/\$(\d+)/)?.[1]);
+                const bMax = parseInt(b.salary.match(/\$(\d+)[^\d]*(\d+)/)?.[2] || b.salary.match(/\$(\d+)/)?.[1]);
+                return bMax - aMax;
+            });
+        case 'salary-low':
+            return sorted.sort((a, b) => {
+                const aMin = parseInt(a.salary.match(/\$(\d+)/)?.[1]);
+                const bMin = parseInt(b.salary.match(/\$(\d+)/)?.[1]);
+                return aMin - bMin;
+            });
+        default:
+            return sorted;
     }
+}
+
+// ================================
+// Render Jobs
+// ================================
+function renderJobs(jobs) {
+    if (!DOM.jobsList) return;
     DOM.jobsList.innerHTML = '';
-    document.getElementById('job-count').textContent = `(${currentFilteredJobs.length})`;
 
     if (jobs.length === 0) {
         DOM.jobsList.innerHTML = `
             <div class="no-results">
                 <h3>No jobs found</h3>
-                <p>Try adjusting your search criteria or filters.</p>
-            </div>
-        `;
+                <p>Try adjusting filters or search terms.</p>
+            </div>`;
         return;
     }
 
     jobs.forEach(job => {
-        const jobCard = document.createElement('div');
-        jobCard.className = 'job-card';
-        jobCard.setAttribute('data-id', job.id);
-        jobCard.innerHTML = `
-            <img src="${job.logo || '/api/placeholder/60/60'}" alt="${job.company}" class="job-logo">
+        const card = document.createElement('div');
+        card.className = 'job-card';
+        card.dataset.id = job.id;
+        card.innerHTML = `
             <div class="job-info">
                 <h3>${job.title}</h3>
                 <div class="company-name">${job.company}</div>
                 <div class="job-meta">
-                    <div class="job-meta-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>${job.location}</span>
-                    </div>
-                    <div class="job-meta-item">
-                        <i class="fas fa-briefcase"></i>
-                        <span>${job.type}</span>
-                    </div>
-                    <div class="job-meta-item">
-                        <i class="fas fa-signal"></i>
-                        <span>${job.experience}</span>
-                    </div>
-                    <div class="job-meta-item">
-                        <i class="fas fa-laptop-house"></i>
-                        <span>${job.remote}</span>
-                    </div>
+                    <div class="job-meta-item"><i class="fas fa-map-marker-alt"></i> ${job.location}</div>
+                    <div class="job-meta-item"><i class="fas fa-briefcase"></i> ${job.type}</div>
+                    <div class="job-meta-item"><i class="fas fa-signal"></i> ${job.experience}</div>
+                    <div class="job-meta-item"><i class="fas fa-laptop-house"></i> ${job.remote}</div>
                 </div>
-                <div class="job-tags">
-                    ${job.tags.map(tag => `<span class="job-tag">${tag}</span>`).join('')}
-                </div>
+                <div class="job-tags">${job.tags.map(t => `<span class="job-tag">${t}</span>`).join('')}</div>
             </div>
             <div class="job-actions">
                 <div class="salary">${job.salary}</div>
                 <div class="job-date">${job.date}</div>
-                <button class="btn btn-outline btn-sm apply-btn">Apply Now</button>
-            </div>
-        `;
-        DOM.jobsList.appendChild(jobCard);
-    });
-};
-
-// Render pagination buttons
-const renderPagination = (filteredJobs = jobsData) => {
-    currentFilteredJobs = filteredJobs;
-    const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
-    DOM.paginationContainer.innerHTML = '';
-
-    for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement('button');
-        btn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
-        btn.textContent = i;
-        btn.addEventListener('click', () => {
-            currentPage = i;
-            document.querySelectorAll('.pagination-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderJobs(getPaginatedJobs(filteredJobs));
-            window.scrollTo({ top: DOM.jobsList.offsetTop - 80, behavior: 'smooth' });
+                <button class="btn btn-primary btn-sm apply-btn">Apply Now</button>
+            </div>`;
+        card.addEventListener('click', e => {
+            if (!e.target.classList.contains('apply-btn')) {
+                showJobModal(job);
+            }
         });
-        DOM.paginationContainer.appendChild(btn);
-    }
-};
-
-// Initialize salary range slider
-const initRangeSlider = () => {
-    if (DOM.salaryRange && DOM.salaryValue) {
-        DOM.salaryRange.min = 300;
-        DOM.salaryRange.max = 2000;
-        DOM.salaryRange.step = 100;
-        DOM.salaryRange.value = 300;
-        DOM.salaryValue.textContent = `KES ${parseInt(DOM.salaryRange.value).toLocaleString()}+`;
-
-        DOM.salaryRange.addEventListener('input', () => {
-            DOM.salaryValue.textContent = `KES ${parseInt(DOM.salaryRange.value).toLocaleString()}+`;
-            filterJobs();
-            currentPage = 1;
-            renderPagination(currentFilteredJobs);
-        });
-    } else {
-        console.warn('Salary range or value element not found');
-    }
-};
-
-// Search jobs
-const searchJobs = () => {
-    const searchTerm = DOM.jobSearch.value.toLowerCase().trim();
-    const locationTerm = DOM.locationSearch.value.toLowerCase().trim();
-
-    const filteredJobs = jobsData.filter(job => {
-        const matchesSearch =
-            searchTerm === '' ||
-            job.title.toLowerCase().includes(searchTerm) ||
-            job.company.toLowerCase().includes(searchTerm) ||
-            job.tags.some(tag => tag.toLowerCase().includes(searchTerm));
-
-        const matchesLocation =
-            locationTerm === '' ||
-            job.location.toLowerCase().includes(locationTerm) ||
-            (locationTerm.includes('remote') && job.remote.toLowerCase() === 'remote');
-
-        return matchesSearch && matchesLocation;
+        DOM.jobsList.appendChild(card);
     });
+}
 
-    currentPage = 1;
-    renderJobs(getPaginatedJobs(filteredJobs));
-    renderPagination(filteredJobs);
-    document.getElementById('job-count').textContent = `(${filteredJobs.length})`;
-};
+// ================================
+// Render Pagination (Block-based, 5-pages per block)
+// ================================
+function renderPagination(jobs) {
+    const totalPages = Math.ceil(jobs.length / jobsPerPage);
+    DOM.paginationNumbers.innerHTML = '';
 
-// Filter jobs
-const filterJobs = () => {
-    const jobTypes = Array.from(document.querySelectorAll('input[name="job-type"]:checked'))
-        .map(checkbox => checkbox.value.toLowerCase());
-    const experiences = Array.from(document.querySelectorAll('input[name="experience"]:checked'))
-        .map(checkbox => checkbox.value.toLowerCase());
-    const remoteOptions = Array.from(document.querySelectorAll('input[name="remote"]:checked'))
-        .map(checkbox => checkbox.value.toLowerCase());
-    const minSalary = parseInt(DOM.salaryRange.value) || 300;
-
-    const filteredJobs = jobsData.filter(job => {
-        const matchesJobType = jobTypes.length === 0 || jobTypes.includes(job.type.toLowerCase());
-        const matchesExperience = experiences.length === 0 || experiences.includes(job.experience.toLowerCase());
-        const matchesRemote = remoteOptions.length === 0 || remoteOptions.includes(job.remote.toLowerCase());
-        const salaryMatch = job.salary.match(/KES\s*(\d+)[^\d]*(\d+)?/);
-        const jobMinSalary = parseInt(salaryMatch[1]) || 0;
-        const jobMaxSalary = parseInt(salaryMatch[2]) || jobMinSalary;
-        const matchesSalary = jobMaxSalary >= minSalary;
-
-        return matchesJobType && matchesExperience && matchesRemote && matchesSalary;
-    });
-
-    currentPage = 1;
-    renderJobs(getPaginatedJobs(filteredJobs));
-    renderPagination(filteredJobs);
-    document.getElementById('job-count').textContent = `(${filteredJobs.length})`;
-};
-
-// Sort jobs
-const sortJobs = () => {
-    const sortBy = DOM.sortSelect.value;
-    let sortedJobs = [...jobsData];
-
-    switch (sortBy) {
-        case 'recent':
-            sortedJobs.sort((a, b) => {
-                const aTime = a.date.includes('day') ? parseInt(a.date) : 14;
-                const bTime = b.date.includes('day') ? parseInt(b.date) : 14;
-                return aTime - bTime;
-            });
-            break;
-        case 'salary-high':
-            sortedJobs.sort((a, b) => {
-                const aMax = parseInt(a.salary.match(/KES\s*\d+[^\d]*(\d+)/)?.[1] || a.salary.match(/KES\s*(\d+)/)[1]);
-                const bMax = parseInt(b.salary.match(/KES\s*\d+[^\d]*(\d+)/)?.[1] || b.salary.match(/KES\s*(\d+)/)[1]);
-                return bMax - aMax;
-            });
-            break;
-        case 'salary-low':
-            sortedJobs.sort((a, b) => {
-                const aMin = parseInt(a.salary.match(/KES\s*(\d+)/)[1]);
-                const bMin = parseInt(b.salary.match(/KES\s*(\d+)/)[1]);
-                return aMin - bMin;
-            });
-            break;
-        default:
-            break;
-    }
-
-    currentPage = 1;
-    renderJobs(getPaginatedJobs(sortedJobs));
-    renderPagination(sortedJobs);
-    document.getElementById('job-count').textContent = `(${sortedJobs.length})`;
-};
-
-// Open job modal
-const openJobModal = (job) => {
-    if (!DOM.modalJobContent) {
-        console.error('Modal content element not found');
+    if (totalPages <= 1) {
+        DOM.paginationContainer.style.display = 'none';
+        DOM.prevPage.disabled = true;
+        DOM.nextPage.disabled = true;
         return;
     }
 
+    DOM.paginationContainer.style.display = 'flex';
+    const pagesPerBlock = 5;
+    const currentBlock = Math.ceil(currentPage / pagesPerBlock);
+    let startPage = (currentBlock - 1) * pagesPerBlock + 1;
+    let endPage = Math.min(startPage + pagesPerBlock - 1, totalPages);
+
+    // First page + leading ellipsis
+    if (startPage > 1) {
+        addPageButton(1, totalPages);
+        if (startPage > 2) addEllipsis();
+    }
+
+    // Middle pages (current block)
+    for (let i = startPage; i <= endPage; i++) {
+        addPageButton(i, totalPages);
+    }
+
+    // Last page + trailing ellipsis
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) addEllipsis();
+        addPageButton(totalPages, totalPages);
+    }
+
+    // Enable / Disable Prev / Next based on blocks
+    DOM.prevPage.disabled = currentPage <= pagesPerBlock;
+    DOM.nextPage.disabled = endPage >= totalPages;
+}
+
+// ================================
+// Helper: Add Page Button
+// ================================
+function addPageButton(pageNum, totalPages) {
+    const btn = document.createElement('button');
+    btn.className = `pagination-btn page-number ${pageNum === currentPage ? 'active' : ''}`;
+    btn.textContent = pageNum;
+    btn.setAttribute('aria-label', `Go to page ${pageNum} of ${totalPages}`);
+    btn.addEventListener('click', () => {
+        currentPage = pageNum;
+        updateJobs();
+        window.scrollTo({ top: DOM.jobsList.offsetTop - 60, behavior: 'smooth' });
+    });
+    DOM.paginationNumbers.appendChild(btn);
+}
+
+// ================================
+// Helper: Add Ellipsis
+// ================================
+function addEllipsis() {
+    const ellipsis = document.createElement('span');
+    ellipsis.className = 'pagination-ellipsis';
+    ellipsis.textContent = '...';
+    DOM.paginationNumbers.appendChild(ellipsis);
+}
+
+// ================================
+// Prev / Next Block Buttons Logic
+// ================================
+DOM.prevPage?.addEventListener('click', () => {
+    const pagesPerBlock = 5;
+    if (currentPage > 1) {
+        // Jump to previous block
+        currentPage = Math.max(1, currentPage - pagesPerBlock);
+        updateJobs();
+        window.scrollTo({ top: DOM.jobsList.offsetTop - 60, behavior: 'smooth' });
+    }
+});
+
+DOM.nextPage?.addEventListener('click', () => {
+    const pagesPerBlock = 5;
+    const totalPages = Math.ceil(currentFilteredJobs.length / jobsPerPage);
+    if (currentPage < totalPages) {
+        // Jump to next block
+        currentPage = Math.min(totalPages, currentPage + pagesPerBlock);
+        updateJobs();
+        window.scrollTo({ top: DOM.jobsList.offsetTop - 60, behavior: 'smooth' });
+    }
+});
+
+// Show Job Modal
+// ================================
+function showJobModal(job) {
     DOM.modalJobContent.innerHTML = `
-        <div class="job-modal-header">
-            <img src="${job.logo || '/api/placeholder/60/60'}" alt="${job.company}" class="job-modal-logo">
-            <div class="job-modal-title">
-                <h2>${job.title}</h2>
-                <div class="job-modal-company">${job.company}</div>
-                <div class="job-meta">
-                    <div class="job-meta-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>${job.location}</span>
-                    </div>
-                    <div class="job-meta-item">
-                        <i class="fas fa-briefcase"></i>
-                        <span>${job.type}</span>
-                    </div>
-                    <div class="job-meta-item">
-                        <i class="fas fa-signal"></i>
-                        <span>${job.experience}</span>
-                    </div>
-                    <div class="job-meta-item">
-                        <i class="fas fa-laptop-house"></i>
-                        <span>${job.remote}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="job-stats">
-            <div class="job-stat-item">
-                <h4>Salary Range</h4>
-                <p>${job.salary}</p>
-            </div>
-            <div class="job-stat-item">
-                <h4>Job Type</h4>
-                <p>${job.type}</p>
-            </div>
-            <div class="job-stat-item">
-                <h4>Experience Level</h4>
-                <p>${job.experience}</p>
-            </div>
-            <div class="job-stat-item">
-                <h4>Work Setting</h4>
-                <p>${job.remote}</p>
-            </div>
-        </div>
-        <div class="job-description">
-            <h3>Job Description</h3>
-            <p>${job.description}</p>
-            <h3>Responsibilities</h3>
-            <ul>
-                ${job.responsibilities.map(item => `<li>${item}</li>`).join('')}
-            </ul>
-            <h3>Requirements</h3>
-            <ul>
-                ${job.requirements.map(item => `<li>${item}</li>`).join('')}
-            </ul>
-            <h3>Benefits</h3>
-            <ul>
-                ${job.benefits.map(item => `<li>${item}</li>`).join('')}
-            </ul>
-        </div>
-        <div class="job-modal-actions">
-            <button class="btn btn-primary btn-lg">Apply Now</button>
-            <button class="btn btn-outline">Save Job</button>
-            <button class="btn btn-outline">Share</button>
-        </div>
-    `;
+        <h2>${job.title}</h2>
+        <p><strong>Company:</strong> ${job.company}</p>
+        <p><strong>Location:</strong> ${job.location}</p>
+        <p><strong>Type:</strong> ${job.type}</p>
+        <p><strong>Experience:</strong> ${job.experience}</p>
+        <p><strong>Remote:</strong> ${job.remote}</p>
+        <p><strong>Salary:</strong> ${job.salary}</p>
+        <p><strong>Description:</strong> ${job.description}</p>
+        <h3>Responsibilities</h3>
+        <ul>${job.responsibilities.map(r => `<li>${r}</li>`).join('')}</ul>
+        <h3>Requirements</h3>
+        <ul>${job.requirements.map(r => `<li>${r}</li>`).join('')}</ul>
+        <h3>Benefits</h3>
+        <ul>${job.benefits.map(b => `<li>${b}</li>`).join('')}</ul>
+        <button id="modal-apply-btn" class="btn btn-primary btn-block">Apply Now</button>`;
 
     DOM.jobModal.style.display = 'block';
-};
 
-// Clear filters
-const clearFilters = () => {
-    document.querySelectorAll('.checkbox-group input').forEach(checkbox => {
-        checkbox.checked = false;
-    });
-
-    if (DOM.salaryRange && DOM.salaryValue) {
-        DOM.salaryRange.value = DOM.salaryRange.min;
-        DOM.salaryValue.textContent = `KES ${parseInt(DOM.salaryRange.min).toLocaleString()}+`;
+    // Prevent duplicate listeners
+       // Apply button in modal
+    const modalApplyBtn = DOM.modalJobContent.querySelector('#modal-apply-btn');
+    modalApplyBtn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        applyJob(job);
+    };
     }
 
-    DOM.jobSearch.value = '';
-    DOM.locationSearch.value = '';
-    DOM.sortSelect.value = 'relevance';
-    currentPage = 1;
+//apply job redirect logic
+// ================================
+// Temporary Notification Helper
+// ================================
+function showTemporaryNotification(message, color = "green") {
+    // Remove existing message if any
+    const existingMsg = document.getElementById("apply-error-msg");
+    if (existingMsg) existingMsg.remove();
 
-    currentFilteredJobs = [...jobsData];
-    renderJobs(getPaginatedJobs(jobsData));
-    renderPagination(jobsData);
-    document.getElementById('job-count').textContent = `(${jobsData.length})`;
-};
+    // Create new notification div
+    const msg = document.createElement("div");
+    msg.id = "apply-error-msg";
+    msg.textContent = message;
 
-// Mock authentication check
-const isLoggedIn = () => {
-    return false; // Placeholder for real auth logic
-};
+    msg.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: ${color};
+        color: white;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-weight: 500;
+        z-index: 10000;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        animation: slideDown 0.4s ease;
+    `;
 
-// Hamburger menu toggle handler
-const toggleNav = () => {
-    if (!DOM.navToggle || !DOM.nav) {
-        console.error('Nav toggle or nav element not found');
+    document.body.appendChild(msg);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        msg.remove();
+    }, 5000);
+
+    // Add slideDown animation once
+    if (!document.getElementById("slideDownStyle")) {
+        const style = document.createElement("style");
+        style.id = "slideDownStyle";
+        style.textContent = `
+            @keyframes slideDown {
+                from { opacity: 0; transform: translate(-50%, -20px); }
+                to { opacity: 1; transform: translateX(-50%); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// ================================
+// Apply Job Function
+// ================================
+async function applyJob(job) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        showTemporaryNotification("Please login first to apply.", "red");
+        setTimeout(() => window.location.href = "login.html", 2000);
         return;
     }
 
-    const isOpen = DOM.nav.classList.toggle('active');
-    DOM.navToggle.innerHTML = isOpen
-        ? '<i class="fas fa-times"></i>'
-        : '<i class="fas fa-bars"></i>';
-    document.body.style.overflow = isOpen ? 'hidden' : ''; // Prevent scrolling when open
-    console.log('Nav toggled:', isOpen); // Debug
-};
-
-// Setup event listeners
-const setupEventListeners = () => {
-    // Hamburger menu
-    if (DOM.navToggle && DOM.nav) {
-        DOM.navToggle.addEventListener('click', toggleNav);
-    } else {
-        console.error('Nav toggle or nav element not found');
+    // Fetch user profile
+    let user;
+    try {
+        const res = await fetch("https://remj82.onrender.com/api/auth/user", {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error("Failed to fetch user");
+        const data = await res.json();
+        user = data.user;
+    } catch (err) {
+        console.error("Failed to fetch user:", err);
+        showTemporaryNotification("Unable to verify your profile. Try again later.", "red");
+        return;
     }
 
-    // Close menu when clicking nav links on mobile
-    document.querySelectorAll('nav a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const href = link.getAttribute('href');
-            document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
+    // Check verification
+    if (!user.verified) {
+        showTemporaryNotification("Your account is not verified to apply.", "red");
+        return;
+    }
 
-            if (href === 'index.html') {
-                clearFilters();
-                DOM.jobSearch.value = '';
-                DOM.locationSearch.value = '';
-                DOM.sortSelect.value = 'relevance';
-                currentPage = 1;
-                currentFilteredJobs = [...jobsData];
-                renderJobs(getPaginatedJobs(jobsData));
-                renderPagination(jobsData);
-                document.getElementById('job-count').textContent = `(${jobsData.length})`;
-            } else {
-                alert(`Navigating to ${href} would be implemented here.`);
-            }
+    // Check connects
+    if ((user.connects || 0) <= 0) {
+        showTemporaryNotification("You don’t have enough connects to apply.", "red");
+        setTimeout(() => window.location.href = "pricing.html", 4000);
+        return;
+    }
 
-            if (DOM.nav.classList.contains('active')) {
-                toggleNav(); // Close menu on link click
-            }
+    // Apply job request
+    try {
+        const res = await fetch(`https://remj82.onrender.com/api/applications/apply/${String(job.id)}`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+               jobId: String(job.id),
+               title: job.title,
+               company: job.company,
+               description: job.description
+           })
+
         });
-    });
 
-    // Job card click
-    DOM.jobsList.addEventListener('click', (e) => {
-        const jobCard = e.target.closest('.job-card');
-        if (jobCard) {
-            const jobId = parseInt(jobCard.getAttribute('data-id'));
-            const job = jobsData.find(job => job.id === jobId);
-            if (job) {
-                openJobModal(job);
-            } else {
-                console.error('Job not found for ID:', jobId);
+        const data = await res.json();
+
+        // Already applied
+        if (data.alreadyApplied) {
+            showTemporaryNotification("You have already applied for this job. Try another.", "yellow");
+            return;
+        }
+
+        // Not enough connects (backend fallback)
+        if (data.limitReached) {
+            showTemporaryNotification("You don’t have enough connects to apply.", "red");
+            setTimeout(() => window.location.href = "pricing.html", 4000);
+            return;
+        }
+
+        // Successful application
+        if (res.ok && data.success) {
+            // Update local user connects
+            user.connects -= 1;
+
+            showTemporaryNotification("Application submitted successfully!", "green");
+
+            // Update in-site notification bell immediately
+            const notificationCountEl = document.getElementById("notificationCount");
+            if (notificationCountEl) {
+                let count = parseInt(notificationCountEl.textContent) || 0;
+                notificationCountEl.textContent = count >= 9 ? "9+" : count + 1;
+                notificationCountEl.style.display = "flex";
             }
-        }
-
-        if (e.target.classList.contains('apply-btn')) {
-            e.stopPropagation();
-            alert('Application functionality would go here! Please submit via M-Pesa or platform.');
-        }
-    });
-
-    // Close modals
-    DOM.closeButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            DOM.jobModal.style.display = 'none';
-            DOM.loginModal.style.display = 'none';
-        });
-    });
-
-    // Click outside modals
-    window.addEventListener('click', (e) => {
-        if (e.target === DOM.jobModal) {
-            DOM.jobModal.style.display = 'none';
-        }
-        if (e.target === DOM.loginModal) {
-            DOM.loginModal.style.display = 'none';
-        }
-    });
-
-    // Login button
-    DOM.loginBtn.addEventListener('click', () => {
-        DOM.loginModal.style.display = 'block';
-    });
-
-    // Post job button
-    DOM.postJobBtn.addEventListener('click', () => {
-        if (isLoggedIn()) {
-            alert('Post job form would appear here!');
         } else {
-            DOM.loginModal.style.display = 'block';
+            // Any other error fallback
+            showTemporaryNotification(data.message || "Unable to apply. Try again later.", "red");
+        }
+
+    } catch (err) {
+        console.error("Apply error:", err);
+        showTemporaryNotification("Unable to apply. Please try again later.", "red");
+    }
+}
+
+
+// Salary Range Slider
+
+function initRangeSlider() {
+    if (!DOM.salaryRange || !DOM.salaryValue) return;
+
+    DOM.salaryRange.min = 2;
+    DOM.salaryRange.max = 23;
+    DOM.salaryRange.step = 1;
+    DOM.salaryRange.value = 2;
+    DOM.salaryValue.textContent = `$${DOM.salaryRange.value}+`;
+
+    DOM.salaryRange.addEventListener('input', () => {
+        DOM.salaryValue.textContent = `$${DOM.salaryRange.value}+`;
+        currentPage = 1;
+        updateJobs();
+    });
+}
+
+
+// Setup Event Listeners
+
+function setupEventListeners() {
+    let debounce;
+    [DOM.jobSearch, DOM.locationSearch].forEach(input => {
+        input.addEventListener('input', () => {
+            clearTimeout(debounce);
+            debounce = setTimeout(() => {
+                currentPage = 1;
+                updateJobs();
+            }, 300);
+        });
+    });
+
+    DOM.searchBtn?.addEventListener('click', e => {
+        e.preventDefault();
+        currentPage = 1;
+        updateJobs();
+    });
+
+    DOM.popularSearches.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            DOM.jobSearch.value = link.dataset.search;
+            currentPage = 1;
+            updateJobs();
+        });
+    });
+
+    document.querySelectorAll('.checkbox-group input').forEach(cb => {
+        cb.addEventListener('change', () => {
+            currentPage = 1;
+            updateJobs();
+        });
+    });
+
+    DOM.clearFilters?.addEventListener('click', () => {
+        document.querySelectorAll('.checkbox-group input').forEach(cb => cb.checked = false);
+        DOM.salaryRange.value = 2;
+        DOM.salaryValue.textContent = `$2+`;
+        DOM.jobSearch.value = '';
+        DOM.locationSearch.value = '';
+        currentPage = 1;
+        updateJobs();
+    });
+
+    DOM.sortSelect?.addEventListener('change', () => {
+        currentPage = 1;
+        updateJobs();
+    });
+
+    DOM.jobsList?.addEventListener('click', e => {
+        if (e.target.classList.contains('apply-btn')) {
+            const jobCard = e.target.closest('.job-card');
+            const jobId = parseInt(jobCard.dataset.id);
+            const jobData = jobsData.find(j => j.id === jobId);
+            if (jobData) showJobModal(jobData);
         }
     });
 
-    // Search button
-    DOM.searchBtn.addEventListener('click', searchJobs);
-
-    // Search inputs Enter key
-    DOM.jobSearch.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') searchJobs();
-    });
-    DOM.locationSearch.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') searchJobs();
+    document.querySelectorAll('.close').forEach(btn => {
+        btn.addEventListener('click', () => {
+            DOM.jobModal.style.display = 'none';
+        });
     });
 
-    // Filter checkboxes
-    document.querySelectorAll('.checkbox-group input').forEach(checkbox => {
-        checkbox.addEventListener('change', filterJobs);
+    DOM.navToggle?.addEventListener('click', () => {
+        DOM.nav.classList.toggle('active');
     });
 
-    // Sort select
-    DOM.sortSelect.addEventListener('change', sortJobs);
-
-    // Login form
-    document.getElementById('login-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Login functionality would be implemented here.');
-        DOM.loginModal.style.display = 'none';
-    });
-
-    // Switch to signup
-    document.getElementById('switch-to-signup').addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('Signup form would appear here.');
-    });
-
-    // Clear filters
-    document.querySelector('.filters-panel .btn-block').addEventListener('click', clearFilters);
-};
-// upwork.js
-document.addEventListener("DOMContentLoaded", () => {
-    // Existing hamburger menu and other logic...
-
-    // Profile icon and logout button visibility
-
-    // Auth check and logout
-    const profileIcon = document.querySelector(".profile-icon");
-    const logoutBtn = document.querySelector(".logout-btn");
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-        window.location.href = "login.html";
-    } else {
-        if (profileIcon) profileIcon.style.display = "flex";
-        if (logoutBtn) logoutBtn.style.display = "inline-flex";
-    }
-
+    const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
-        logoutBtn.addEventListener("click", async () => {
-            try {
-                await fetch("https://remj82.onrender.com/api/auth/logout", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    credentials: "include"
-                });
-            } catch (err) {
-                console.error("Logout error:", err);
-            }
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("userEmail");
-            window.location.href = "../index.html"; // Changed to index.html
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userProfile');
+            window.location.href = '../index.html';
         });
     }
+}
+ 
+// NOTIFICATION BELL SYNC (Shared across pages)
+ 
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  const bell = document.getElementById("notificationBell");
+  const countSpan = document.getElementById("notificationCount");
+
+  if (!bell || !countSpan) return;
+
+  // Fetch unread count
+  async function updateCount() {
+    try {
+      const res = await fetch("https://remj82.onrender.com/api/notifications", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      const unread = (data || []).filter(n => !n.read).length;
+
+      countSpan.textContent = unread > 9 ? "9+" : unread;
+      countSpan.style.display = unread > 0 ? "flex" : "none";
+    } catch (err) {
+      console.error("Notification fetch error:", err);
+    }
+  }
+
+  // Click → Mark all read + go to notifications.html
+  bell.addEventListener("click", async (e) => {
+    e.preventDefault();
+    try {
+      await fetch("https://remj82.onrender.com/api/notifications/mark-all-read", {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch (err) {
+      console.error("Mark all read failed:", err);
+    } finally {
+      window.location.href = "./notifications.html"; // ← CORRECT PATH
+    }
+  });
+
+  // Initial + every 15 seconds
+  updateCount();
+  setInterval(updateCount, 15000);
 });

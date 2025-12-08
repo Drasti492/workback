@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile — RemoteProJobs</title>
+    <link rel="stylesheet" href="../frontend/styles/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <style>
+        /* Override red alert with green verified notice */
+        .verify-notice {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--success-color) !important;
+            background: rgba(16, 185, 129, 0.1) !important;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .verify-notice i {
+            font-size: 16px;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.15);
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--success-color);
+            font-weight: 600;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .verified-badge i {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-left">
+            <div class="logo">
+                <h1><i class="fas fa-briefcase"></i> RemoteProJobs</h1>
+            </div>
+        </div>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav>
+            <ul>
+                <li><a href="./work.html" class="active">Earn</a></li>
+                <li><a href="./companies.html">Companies</a></li>
+                <li><a href="./resources.html">Resources</a></li>
+                <li><a href="./contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <a href="./profile.html" class="profile-icon" aria-label="User Profile">
+                <i class="fas fa-user"></i>
+            </a>
+            <button class="btn btn-outline btn-sm logout-btn" id="logoutBtn">Logout</button>
+        </div>
+    </div>
+</header>
+
+    <main class="auth-card" role="main" aria-labelledby="profile-title">
+        <div class="auth-brand">
+            <div class="logo">RP</div>
+            <h1>RemoteProJobs</h1>
+        </div>
+
+        <h2 id="profile-title">Your Profile</h2>
+
+        <!-- VERIFIED GREEN NOTICE -->
+        <p class="verify-notice">
+            <i class="fas fa-check-circle"></i>
+            Your account is verified and active!
+        </p>
+
+        <div class="profile-info">
+            <div class="profile-field">
+                <i class="fas fa-user"></i>
+                <span><strong>Username:</strong> 
+                    <span id="profile-username">Robbin Kim</span>
+                    <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span>
+                </span>
+            </div>
+            <div class="profile-field">
+                <i class="fas fa-phone"></i>
+                <span><strong>Phone :</strong> <span id="profile-phone">+1 (555) 123-4567</span></span>
+            </div>
+            <div class="profile-field">
+                <i class="fas fa-envelope"></i>
+                <span><strong>Email:</strong> <span id="profile-email">robbinkim87@gmail.com</span></span>
+            </div>
+            <div class="profile-field">
+                <i class="fas fa-wallet"></i>
+                <span><strong>Account Balance:</strong> <span id="profile-balance">$235.75</span></span>
+            </div>
+            <p class="disclaimer">Minimum withdrawal is 4 $.</p>
+            <p class="warning">Any sign of irregularities will result in an immediate account ban.</p>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-outline btn-sm back-btn">Start Earning</button>
+            <a href="../pages/withraw.html"><button class="btn btn-primary btn-sm withdraw-btn" id="withdrawBtn">Withdraw</button></a>
+            <button class="btn btn-primary btn-sm" id="logoutBtn">Log Out</button>
+        </div>
+
+        <p class="message" id="profileMessage" aria-live="polite"></p>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 RemoteProJobs. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../scripts/profile.js"></script>
+    <script src="../scripts/nav.js"></script>
+</body>
+</html>

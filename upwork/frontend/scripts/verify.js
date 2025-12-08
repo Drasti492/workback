@@ -1,91 +1,100 @@
+// scripts/verify.js
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("verifyForm");
-  const msgEl = document.getElementById("verifyMessage");
+  const verifyForm = document.getElementById("verifyForm");
+  const emailInput = document.getElementById("verifyEmail");
+  const codeInput = document.getElementById("code");
+  const verifyMessage = document.getElementById("verifyMessage");
   const resendLink = document.getElementById("resendLink");
-  const backHomeBtn = document.querySelector(".back-home-btn"); // Added
-  const apiBase = "https://remj82.onrender.com/api/auth";
+  const backBtn = document.querySelector(".back-btn");
 
-  // Pre-fill email if stored
-  const saved = localStorage.getItem("verifyEmail");
-  if (saved) {
-    document.getElementById("verifyEmail").value = saved;
-  }
+  const showMessage = (text, type = "error") => {
+    verifyMessage.textContent = text;
+    verifyMessage.className = `message ${type}`;
+    verifyMessage.style.display = "block";
+  };
 
-  function showMessage(text, type = "error") {
-    msgEl.textContent = text;
-    msgEl.className = `message ${type}`;
-  }
+  // Autofill email from signup
+  const savedEmail = localStorage.getItem("verifyEmail");
+  if (savedEmail) emailInput.value = savedEmail;
 
-  // Verify form submission
-  form.addEventListener("submit", async (e) => {
+  // Verify form submit
+  verifyForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    showMessage("", "");
 
-    const email = document.getElementById("verifyEmail").value.trim();
-    const code = document.getElementById("code").value.trim();
+    const email = emailInput.value.trim();
+    const code = codeInput.value.trim();
 
-    if (!email || !code) return showMessage("Enter email and the 6-digit code.");
+    if (!email || !code) {
+      showMessage("Please fill in both email and verification code.");
+      return;
+    }
 
-    const btn = document.getElementById("verifyBtn");
-    btn.disabled = true;
-    btn.textContent = "Verifying...";
+    showMessage("Verifying your email...", "success");
 
     try {
-      const res = await fetch(`${apiBase}/verify-code`, {
+      const res = await fetch("https://remj82.onrender.com/api/auth/verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code }),
       });
 
       const data = await res.json();
+      console.log("Verify API response:", data);
 
-      if (res.ok) {
-        showMessage("Email verified! Redirecting...", "success");
-        localStorage.setItem("userEmail", email);
-        setTimeout(() => window.location.href = "work.html", 900); // Redirect to work.html
-      } else {
-        showMessage(data.message || "Verification failed.");
+      if (!res.ok) {
+        showMessage(data.message || "Verification failed. Try again.");
+        return;
       }
+
+      showMessage("✅ Email verified successfully! Redirecting to login...", "success");
+      localStorage.removeItem("verifyEmail");
+
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 2000);
     } catch (err) {
       console.error("Verify error:", err);
-      showMessage("Network error. Try again.");
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "Verify";
+      showMessage("Network error. Please try again.");
     }
   });
 
-  // Resend code
-  resendLink.addEventListener("click", async (ev) => {
-    ev.preventDefault();
-    const email = document.getElementById("verifyEmail").value.trim();
-    if (!email) return showMessage("Enter email to resend code.");
+  // Resend verification code
+  resendLink.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const email = emailInput.value.trim();
+    if (!email) {
+      showMessage("Enter your email to resend verification code.");
+      return;
+    }
+
+    showMessage("Resending code...", "success");
 
     try {
-      resendLink.textContent = "Sending...";
-      const res = await fetch(`${apiBase}/register`, { // Changed to /register
+      const res = await fetch("https://remj82.onrender.com/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }), // Minimal payload to trigger code resend
+        body: JSON.stringify({ email }),
       });
+
       const data = await res.json();
-      if (res.ok) {
-        showMessage("Verification code resent.", "success");
-      } else {
-        showMessage(data.message || "Could not resend code.");
+      console.log("Resend response:", data);
+
+      if (!res.ok) {
+        showMessage(data.message || "Failed to resend code.");
+        return;
       }
+
+      showMessage("📩 Verification code resent! Check your email.", "success");
     } catch (err) {
       console.error("Resend error:", err);
-      showMessage("Network error while resending.");
-    } finally {
-      resendLink.textContent = "Resend";
+      showMessage("Network error while resending code.");
     }
   });
 
-  // Back to Home
-  if (backHomeBtn) {
-    backHomeBtn.addEventListener("click", () => {
-      window.location.href = "../index.html";
+  // Back to signup
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      window.location.href = "signup.html";
     });
   }
 });
