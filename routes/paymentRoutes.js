@@ -7,7 +7,7 @@ const PAYHERO_BASE = "https://backend.payhero.co.ke/api/v2";
 const PAYHERO_API_KEY = process.env.PAYHERO_API_KEY;
 
 /**
- * 1️⃣ Initiate STK Push
+ * Initiate STK Push
  */
 router.post("/stk-push", async (req, res) => {
   try {
@@ -51,7 +51,7 @@ router.post("/stk-push", async (req, res) => {
 });
 
 /**
- * 2️⃣ PayHero Callback
+ * PayHero Callback
  */
 router.post("/callback", async (req, res) => {
   try {
@@ -66,13 +66,8 @@ router.post("/callback", async (req, res) => {
 
     payment.checkoutRequestID = payload.CheckoutRequestID;
     payment.resultDesc = payload.ResultDesc;
-
-    if (payload.ResultCode === 0) {
-      payment.status = "success";
-      payment.mpesaReceipt = payload.MpesaReceiptNumber;
-    } else {
-      payment.status = "failed";
-    }
+    payment.status = payload.ResultCode === 0 ? "success" : "failed";
+    payment.mpesaReceipt = payload.MpesaReceiptNumber || null;
 
     await payment.save();
     res.sendStatus(200);
@@ -83,16 +78,14 @@ router.post("/callback", async (req, res) => {
 });
 
 /**
- * 3️⃣ Payment Status Polling
+ * Payment Status Polling
  */
 router.get("/status/:id", async (req, res) => {
   try {
     const payment = await Payment.findById(req.params.id);
-
     if (!payment) {
       return res.status(404).json({ status: "not_found" });
     }
-
     res.json({ status: payment.status });
   } catch {
     res.status(500).json({ status: "error" });
