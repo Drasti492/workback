@@ -7,7 +7,7 @@ const PAYHERO_BASE = "https://backend.payhero.co.ke/api/v2";
 const PAYHERO_API_KEY = process.env.PAYHERO_API_KEY;
 
 /**
- * Initiate STK Push
+ * 1️⃣ Initiate STK Push
  */
 router.post("/stk-push", async (req, res) => {
   try {
@@ -17,11 +17,15 @@ router.post("/stk-push", async (req, res) => {
       return res.status(400).json({ message: "Phone and amount required" });
     }
 
-    const payment = await Payment.create({
+    // 🔑 create payment WITH externalReference immediately
+    const payment = new Payment({
       phone,
       amount: amountKES,
       status: "pending"
     });
+
+    payment.externalReference = payment._id.toString();
+    await payment.save();
 
     const response = await axios.post(
       `${PAYHERO_BASE}/stk/push`,
@@ -29,7 +33,7 @@ router.post("/stk-push", async (req, res) => {
         phone_number: phone,
         amount: amountKES,
         callback_url: `${process.env.BASE_URL}/api/payments/callback`,
-        external_reference: payment._id.toString()
+        external_reference: payment.externalReference
       },
       {
         headers: {
@@ -39,8 +43,7 @@ router.post("/stk-push", async (req, res) => {
       }
     );
 
-    payment.externalReference = payment._id.toString();
-    payment.checkoutRequestID = response.data?.CheckoutRequestID;
+    payment.checkoutRequestID = response.data?.CheckoutRequestID || null;
     await payment.save();
 
     res.json({ paymentId: payment._id });
@@ -51,7 +54,7 @@ router.post("/stk-push", async (req, res) => {
 });
 
 /**
- * PayHero Callback
+ * 2️⃣ PayHero Callback (HEART)
  */
 router.post("/callback", async (req, res) => {
   try {
@@ -78,7 +81,7 @@ router.post("/callback", async (req, res) => {
 });
 
 /**
- * Payment Status Polling
+ * 3️⃣ Payment Status Polling
  */
 router.get("/status/:id", async (req, res) => {
   try {
