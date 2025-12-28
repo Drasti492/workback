@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const applicationController = require("../controllers/applicationController");
-const authMiddleware = require("../middleware/auth");
+const submitApplication = require("../controllers/applicationController");
 
-router.post("/submit-application", authMiddleware, applicationController.submitApplication);
+router.post("/apply", submitApplication);
 
 module.exports = router;
