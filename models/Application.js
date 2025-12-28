@@ -6,7 +6,7 @@ const applicationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Payment",
       required: true,
-      unique: true // 🚨 cannot submit twice
+      unique: true //  cannot submit twice
     },
 
     country: String,
