@@ -3,7 +3,7 @@ const router = express.Router();
 const axios = require("axios");
 const Payment = require("../models/Payment");
 
-const PAYHERO_BASE = "https://backend.payhero.co.ke/api/v2";
+const PAYHERO_BASE = "https://backend.payhero.co.ke/api/v2/payments";
 const PAYHERO_API_KEY = process.env.PAYHERO_API_KEY;
 
 /**
