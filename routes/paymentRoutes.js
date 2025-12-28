@@ -1,3 +1,7 @@
+const express = require("express");
+const router = express.Router();
+const Payment = require("../models/Payment"); // keep your existing model path
+
 router.post("/callback", async (req, res) => {
   const payload = req.body?.response;
   if (!payload) return res.sendStatus(400);
@@ -21,3 +25,5 @@ router.post("/callback", async (req, res) => {
   await payment.save();
   res.sendStatus(200);
 });
+
+module.exports = router;
