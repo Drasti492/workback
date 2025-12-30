@@ -3,11 +3,11 @@ const router = express.Router();
 const axios = require("axios");
 const Payment = require("../models/Payment");
 
-const PAYHERO_BASE = "https://backend.payhero.co.ke/api/v2/payments";
-const PAYHERO_API_KEY = process.env.PAYHERO_API_KEY;
+// PayHero constants
+const PAYHERO_ENDPOINT = "https://backend.payhero.co.ke/api/v2/payments";
 
 /**
- * 1️⃣ Initiate STK Push
+ * 1️⃣ INITIATE STK PUSH
  */
 router.post("/stk-push", async (req, res) => {
   try {
@@ -17,44 +17,49 @@ router.post("/stk-push", async (req, res) => {
       return res.status(400).json({ message: "Phone and amount required" });
     }
 
-    // 🔑 create payment WITH externalReference immediately
-    const payment = new Payment({
+    // ✅ create payment FIRST
+    const payment = await Payment.create({
       phone,
-      amount: amountKES,
+      amountKES,
+      externalReference: `PAY-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
       status: "pending"
     });
 
-    payment.externalReference = payment._id.toString();
-    await payment.save();
-
+    // ✅ PayHero request (CONFIRMED WORKING FORMAT)
     const response = await axios.post(
-      `${PAYHERO_BASE}/stk/push`,
+      PAYHERO_ENDPOINT,
       {
-        phone_number: phone,
         amount: amountKES,
-        callback_url: `${process.env.BASE_URL}/api/payments/callback`,
-        external_reference: payment.externalReference
+        phone_number: phone,
+        channel_id: Number(process.env.PAYHERO_CHANNEL_ID),
+        provider: "m-pesa",
+        external_reference: payment.externalReference,
+        callback_url: process.env.PAYHERO_CALLBACK_URL
       },
       {
         headers: {
-          Authorization: `Bearer ${PAYHERO_API_KEY}`,
+          Authorization: `Basic ${process.env.PAYHERO_BASIC_AUTH}`,
           "Content-Type": "application/json"
         }
       }
     );
 
+    // Save CheckoutRequestID if provided
     payment.checkoutRequestID = response.data?.CheckoutRequestID || null;
     await payment.save();
 
-    res.json({ paymentId: payment._id });
+    res.json({
+      paymentId: payment._id
+    });
+
   } catch (err) {
-    console.error("STK error:", err.response?.data || err.message);
+    console.error("❌ STK PUSH ERROR:", err.response?.data || err.message);
     res.status(500).json({ message: "Failed to initiate payment" });
   }
 });
 
 /**
- * 2️⃣ PayHero Callback (HEART)
+ * 2️⃣ PAYHERO CALLBACK (THE HEART)
  */
 router.post("/callback", async (req, res) => {
   try {
@@ -69,27 +74,36 @@ router.post("/callback", async (req, res) => {
 
     payment.checkoutRequestID = payload.CheckoutRequestID;
     payment.resultDesc = payload.ResultDesc;
-    payment.status = payload.ResultCode === 0 ? "success" : "failed";
-    payment.mpesaReceipt = payload.MpesaReceiptNumber || null;
+
+    if (payload.ResultCode === 0) {
+      payment.status = "success";
+      payment.mpesaReceipt = payload.MpesaReceiptNumber || null;
+    } else {
+      payment.status = "failed";
+    }
 
     await payment.save();
     res.sendStatus(200);
+
   } catch (err) {
-    console.error("Callback error:", err.message);
+    console.error(" CALLBACK ERROR:", err.message);
     res.sendStatus(500);
   }
 });
 
 /**
- * 3️⃣ Payment Status Polling
+ * PAYMENT STATUS POLLING
  */
 router.get("/status/:id", async (req, res) => {
   try {
     const payment = await Payment.findById(req.params.id);
+
     if (!payment) {
       return res.status(404).json({ status: "not_found" });
     }
+
     res.json({ status: payment.status });
+
   } catch {
     res.status(500).json({ status: "error" });
   }

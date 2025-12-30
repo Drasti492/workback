@@ -2,19 +2,26 @@ const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema(
   {
-    phone: String,
-    amountKES: Number,
-
-    status: {
+    phone: {
       type: String,
-      enum: ["pending", "success", "failed"],
-      default: "pending"
+      required: true
+    },
+
+    amountKES: {
+      type: Number,
+      required: true
     },
 
     externalReference: {
       type: String,
       required: true,
       unique: true
+    },
+
+    status: {
+      type: String,
+      enum: ["pending", "success", "failed"],
+      default: "pending"
     },
 
     checkoutRequestID: String,
