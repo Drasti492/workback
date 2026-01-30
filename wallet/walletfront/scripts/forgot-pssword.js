@@ -4,7 +4,7 @@ document.getElementById("forgotForm").addEventListener("submit", async (e) => {
   const email = document.getElementById("email").value;
   const msg = document.getElementById("forgotMessage");
 
-  const res = await fetch("https://remj82.onrender.com/api/auth/forgot-password", {
+  const res = await fetch("https://wallback.onrender.com/api/auth/forgot-password", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email })
@@ -18,3 +18,18 @@ document.getElementById("forgotForm").addEventListener("submit", async (e) => {
     setTimeout(() => window.location.href = "reset-password.html", 700);
   }
 });
+
+// ... your existing code ...
+
+const button = document.querySelector('#forgotForm button[type="submit"]');
+const originalText = button.textContent;
+
+button.disabled = true;
+button.textContent = "Sending code...";
+
+// after fetch
+if (!res.ok) {
+  button.disabled = false;
+  button.textContent = originalText;
+}
+// same for catch block

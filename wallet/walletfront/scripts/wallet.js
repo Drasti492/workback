@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /* =========================
      FETCH WALLET
   ========================== */
-  fetch("https://remj82.onrender.com/api/wallet/me", {
+  fetch("https://wallback.onrender.com/api/wallet/me", {
     headers: { Authorization: `Bearer ${token}` }
   })
     .then(async res => {
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ========================== */
   async function loadTransactions() {
     try {
-      const res = await fetch("https://remj82.onrender.com/api/transactions", {
+      const res = await fetch("https://wallback.onrender.com/api/transactions", {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!res.ok) return;
@@ -98,75 +98,89 @@ document.addEventListener("DOMContentLoaded", () => {
       list.innerHTML = "";
 
       txs.forEach(tx => {
-        list.innerHTML += `
-          <li>
-            <span>${tx.type}</span>
-            <span>$${tx.amount}</span>
-            <span>${tx.status}</span>
-          </li>
-        `;
-      });
+  list.innerHTML += `
+    <li class="transaction-item">
+      <span class="type">${tx.type.toUpperCase()}</span>
+      <span class="amount">$${tx.amount.toFixed(2)}</span>
+      <span class="status ${tx.status}">${tx.status}</span>
+    </li>
+  `;
+});
     } catch {}
   }
 
+
   /* =========================
-     WITHDRAW (FIXED)
-  ========================== */
-  const withdrawBtn = document.getElementById("withdrawBtn");
-  const withdrawModal = document.getElementById("withdrawModal");
-  const closeWithdraw = document.getElementById("closeWithdraw");
-  const confirmWithdraw = document.getElementById("confirmWithdraw");
+   WITHDRAW (UX POLISHED)
+========================== */
+const withdrawBtn = document.getElementById("withdrawBtn");
+const withdrawModal = document.getElementById("withdrawModal");
+const closeWithdraw = document.getElementById("closeWithdraw");
+const confirmWithdraw = document.getElementById("confirmWithdraw");
 
-  withdrawBtn.onclick = () => withdrawModal.style.display = "flex";
-  closeWithdraw.onclick = () => withdrawModal.style.display = "none";
+withdrawBtn.onclick = () => {
+  withdrawModal.style.display = "flex";
+};
 
-  confirmWithdraw.onclick = async () => {
-    const amount = parseFloat(document.getElementById("withdrawAmount").value);
-    const phone = document.getElementById("phoneNumber").value.trim();
+closeWithdraw.onclick = () => {
+  withdrawModal.style.display = "none";
+};
 
-    if (!phone || isNaN(amount) || amount <= 0 || amount > currentBalance) {
-      alert("Invalid withdrawal details");
-      return;
-    }
+confirmWithdraw.onclick = async () => {
+  const amount = Number(document.getElementById("withdrawAmount").value);
+  const phone = document.getElementById("phoneNumber").value.trim();
 
-    try {
-      const res = await fetch("https://remj82.onrender.com/api/wallet/withdraw", {
+  if (!phone || isNaN(amount) || amount <= 0) {
+    showToast("Enter valid withdrawal details", "error");
+    return;
+  }
+
+  if (amount > currentBalance) {
+    showToast("Insufficient wallet balance", "error");
+    return;
+  }
+
+  confirmWithdraw.textContent = "Processing...";
+  confirmWithdraw.disabled = true;
+
+  try {
+    const res = await fetch(
+      "https://wallback.onrender.com/api/wallet/withdraw",
+      {
         method: "POST",
         headers: {
-          "Content-Type":"application/json",
-          Authorization:`Bearer ${token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ amount, phone })
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-
-      const confirmPay = confirm(
-        `Withdraw $${amount}\nKES ${data.kesAmount}\nTo phone: ${phone}`
-      );
-
-      if (!confirmPay) {
-        await fetch("https://remj82.onrender.com/api/wallet/withdraw/cancel", {
-          method:"POST",
-          headers:{
-            "Content-Type":"application/json",
-            Authorization:`Bearer ${token}`
-          },
-          body:JSON.stringify({ transactionId:data.transactionId })
-        });
-        alert("Withdrawal cancelled");
-        return;
       }
+    );
 
-      alert("Withdrawal pending PayHero confirmation");
-      withdrawModal.style.display = "none";
-      loadTransactions();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message);
 
-    } catch (err) {
-      alert(err.message);
+    showToast(
+      `Withdrawal of $${amount} initiated. Check your phone to confirm.`,
+      "info",
+      6000
+    );
+
+    withdrawModal.style.display = "none";
+
+    // 🔑 PayHero STK Push
+    if (data.checkoutUrl) {
+      setTimeout(() => {
+        window.location.href = data.checkoutUrl;
+      }, 1500);
     }
-  };
+
+  } catch (err) {
+    showToast(err.message || "Withdrawal cancelled", "error");
+  } finally {
+    confirmWithdraw.textContent = "Confirm Withdraw";
+    confirmWithdraw.disabled = false;
+  }
+};
 
   /* =========================
      LOGOUT

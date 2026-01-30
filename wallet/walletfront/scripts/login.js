@@ -1,42 +1,51 @@
 const form = document.getElementById("loginForm");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
+const message = document.getElementById("loginMessage");
+const button = form.querySelector('button[type="submit"]');
+const originalButtonText = button.textContent;
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const email = emailInput.value.trim();      // ✅ FIX
-  const password = passwordInput.value.trim(); // ✅ FIX
+  const email = form.querySelector("#email").value.trim();
+  const password = form.querySelector("#password").value.trim();
 
   if (!email || !password) {
-    alert("Please enter email and password");
+    message.textContent = "Please enter email and password";
+    message.classList.add("error");
     return;
   }
 
+  button.disabled = true;
+  button.textContent = "Logging in...";
+  message.textContent = "";
+
   try {
-    const res = await fetch("https://remj82.onrender.com/api/auth/login", {
+    const res = await fetch("https://wallback.onrender.com/api/auth/login", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
     });
 
     const data = await res.json();
 
     if (!res.ok) {
-      alert(data.message || "Login failed");
+      message.textContent = data.message || "Login failed";
+      message.classList.add("error");
+      button.disabled = false;
+      button.textContent = originalButtonText;
       return;
     }
 
-    //  Save token
     localStorage.setItem("token", data.token);
+    message.textContent = "Login successful!";
+    message.classList.add("success");
 
-    // Redirect to wallet
-    window.location.href = "./wallet.html";
+    setTimeout(() => window.location.href = "./wallet.html", 800);
 
   } catch (err) {
-    console.error(err);
-    alert("Something went wrong. Try again.");
+    message.textContent = "Something went wrong. Try again.";
+    message.classList.add("error");
+    button.disabled = false;
+    button.textContent = originalButtonText;
   }
 });

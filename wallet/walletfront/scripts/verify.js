@@ -8,7 +8,7 @@ document.getElementById("verifyForm").addEventListener("submit", async (e) => {
   const code = document.getElementById("code").value.trim();
   const msg = document.getElementById("verifyMessage");
 
-  const res = await fetch("https://remj82.onrender.com/api/auth/verify-code", {
+  const res = await fetch("https://wallback.onrender.com/api/auth/verify-code", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, code })
@@ -23,7 +23,7 @@ document.getElementById("verifyForm").addEventListener("submit", async (e) => {
 });
 
 document.getElementById("resend").onclick = async () => {
-  await fetch("https://remj82.onrender.com/api/auth/resend-verification", {
+  await fetch("https://wallback.onrender.com/api/auth/resend-verification", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: emailInput.value })

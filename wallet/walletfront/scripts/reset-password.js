@@ -9,7 +9,7 @@ document.getElementById("resetForm").addEventListener("submit", async (e) => {
   const password = document.getElementById("password").value;
   const msg = document.getElementById("resetMessage");
 
-  const res = await fetch("https://remj82.onrender.com/api/auth/reset-password", {
+  const res = await fetch("https://wallback.onrender.com/api/auth/reset-password", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, code, newPassword: password })
